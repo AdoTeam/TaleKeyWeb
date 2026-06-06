@@ -2,139 +2,152 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lisans Sistemi</title>
+<title>Tale HUB Key System</title>
 
 <style>
 body{
-    font-family:Arial,sans-serif;
-    background:#111;
+    background:#0f0f0f;
     color:white;
+    font-family:Arial;
     text-align:center;
-    padding-top:50px;
+    padding-top:40px;
 }
 
-.container{
-    width:350px;
-    margin:auto;
-    background:#1c1c1c;
-    padding:20px;
-    border-radius:12px;
+.title{
+    font-size:40px;
+    font-weight:bold;
+    background: linear-gradient(90deg, red, yellow, green, cyan, blue, magenta);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.box{
+    margin-top:20px;
 }
 
 input{
-    width:90%;
     padding:10px;
-    margin:10px 0;
+    width:200px;
+    border-radius:6px;
+    border:none;
 }
 
 button{
-    padding:10px 20px;
+    padding:10px;
+    margin:5px;
     cursor:pointer;
 }
 
+.task{
+    display:none;
+    margin-top:20px;
+}
+
 #keyBox{
-    margin-top:15px;
-    word-break:break-all;
+    margin-top:20px;
+    font-size:20px;
+    color:#00ff99;
 }
 </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h2>Lisans Oluşturucu</h2>
+<div class="title">Tale HUB</div>
+<h3>Key System</h3>
 
-    <input id="username" placeholder="Kullanıcı Adı">
+<div class="box">
+    <input id="username" placeholder="Adını yaz">
+    <button onclick="startSystem()">✔</button>
+</div>
 
-    <br>
+<div class="task" id="taskArea">
 
-    <button id="taskBtn">
-        Göreve Git
-    </button>
+    <h3>Görevler</h3>
+
+    <button onclick="openTask(1)">Görev 1 (YouTube)</button>
+    <button onclick="openTask(2)">Görev 2 (YouTube)</button>
+    <button onclick="openTask(3)">Görev 3 (YouTube)</button>
 
     <p id="timer"></p>
 
-    <button id="generateBtn" disabled>
-        Lisans Oluştur
+    <button id="genBtn" disabled onclick="generateKey()">
+        Key Oluştur
     </button>
 
     <div id="keyBox"></div>
 </div>
 
 <script>
-document.getElementById("taskBtn").onclick = () => {
 
-    window.open(
-        "https://youtube.com",
-        "_blank"
-    );
+let time = 95;
+let finished = false;
+let usernameGlobal = "";
 
-    let seconds = 95;
+// kullanıcı başlat
+function startSystem(){
+    let name = document.getElementById("username").value;
 
-    document.getElementById("taskBtn").disabled = true;
-
-    const interval = setInterval(() => {
-
-        document.getElementById("timer").innerText =
-            seconds + " saniye bekleyin";
-
-        seconds--;
-
-        if(seconds < 0){
-            clearInterval(interval);
-
-            document.getElementById("timer").innerText =
-                "Tamamlandı";
-
-            document.getElementById("generateBtn").disabled = false;
-        }
-
-    },1000);
-};
-
-async function generateKey(username){
-
-    const today = new Date();
-
-    const data =
-        username.toLowerCase() +
-        "|" +
-        today.toISOString().slice(0,10) +
-        "|" +
-        "SECRET_2026";
-
-    const hashBuffer = await crypto.subtle.digest(
-        "SHA-256",
-        new TextEncoder().encode(data)
-    );
-
-    const hashArray =
-        Array.from(new Uint8Array(hashBuffer));
-
-    return hashArray
-        .map(x => x.toString(16).padStart(2,"0"))
-        .join("")
-        .substring(0,32)
-        .toUpperCase();
-}
-
-document.getElementById("generateBtn").onclick =
-async () => {
-
-    const username =
-        document.getElementById("username").value;
-
-    if(!username){
-        alert("Kullanıcı adı gir");
+    if(!name){
+        alert("Ad gir");
         return;
     }
 
-    const key =
-        await generateKey(username);
+    usernameGlobal = name;
 
-    document.getElementById("keyBox").innerHTML =
-        "<h3>Lisans:</h3>" + key;
-};
+    document.getElementById("taskArea").style.display = "block";
+}
+
+// görev aç
+function openTask(id){
+    window.open("https://youtube.com", "_blank");
+
+    if(finished) return;
+
+    let interval = setInterval(() => {
+
+        document.getElementById("timer").innerText =
+            time + " saniye kaldı";
+
+        time--;
+
+        if(time < 0){
+            clearInterval(interval);
+
+            document.getElementById("timer").innerText =
+                "Hazır!";
+
+            document.getElementById("genBtn").disabled = false;
+
+            finished = true;
+        }
+
+    }, 1000);
+}
+
+// basit "karıştırma key"
+function generateKey(){
+
+    let name = usernameGlobal.toUpperCase();
+    let date = new Date().toISOString().slice(0,10).replaceAll("-","");
+
+    let mixed = "";
+
+    let max = Math.max(name.length, date.length);
+
+    for(let i=0;i<max;i++){
+
+        if(name[i]) mixed += name[i];
+        if(date[i]) mixed += date[i];
+    }
+
+    let finalKey =
+        btoa(mixed).substring(0,24).toUpperCase();
+
+    document.getElementById("keyBox").innerText =
+        "KEY: " + finalKey;
+}
+
 </script>
 
 </body>

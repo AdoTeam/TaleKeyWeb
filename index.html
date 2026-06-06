@@ -120,6 +120,13 @@ input{
 .navy-feat{background:#0c1c35;color:white;}
 .sapphire-feat{background:#0f2a4d;color:white;}
 
+/* KEY GREEN */
+.key-success{
+    color:#00ff99;
+    font-weight:bold;
+    margin-top:10px;
+}
+
 </style>
 </head>
 
@@ -161,6 +168,9 @@ input{
         </button>
 
         <div id="keyBox"></div>
+        <button class="btn" id="copyBtn" style="display:none;" onclick="copyKey()">
+            Copy Key
+        </button>
 
     </div>
 </div>
@@ -205,6 +215,7 @@ function task(i){
         }else{
             clearInterval(interval);
             el.innerHTML="✔";
+            el.classList.add("check");
             done[i]=true;
             checkAll();
         }
@@ -230,27 +241,21 @@ function generateKey(){
         if(date[i]) mix+=date[i];
     }
 
-    document.getElementById("keyBox").innerText=
-    "KEY: "+btoa(mix).substring(0,26).toUpperCase();
+    let key="KEY: "+btoa(mix).substring(0,26).toUpperCase();
+
+    let box=document.getElementById("keyBox");
+    box.innerText=key;
+    box.classList.add("key-success");
+
+    document.getElementById("copyBtn").style.display="block";
 }
 
-/* THEMES */
-function setTheme(type){
-
-    document.body.className=type+"-body";
-    document.getElementById("card").className="card "+type+"-card";
-    document.getElementById("features").className="features "+type+"-feat";
+function copyKey(){
+    let text=document.getElementById("keyBox").innerText;
+    navigator.clipboard.writeText(text);
 }
 
 </script>
-
-<!-- simple theme switch -->
-<div style="position:fixed;top:15px;right:15px;">
-    <button onclick="setTheme('white')">White</button>
-    <button onclick="setTheme('black')">Black</button>
-    <button onclick="setTheme('navy')">Navy</button>
-    <button onclick="setTheme('sapphire')">Sapphire</button>
-</div>
 
 </body>
 </html>

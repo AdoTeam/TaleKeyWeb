@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lisans Sistemi</title>
 
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#111;
+    color:white;
+    text-align:center;
+    padding-top:50px;
+}
+
+.container{
+    width:350px;
+    margin:auto;
+    background:#1c1c1c;
+    padding:20px;
+    border-radius:12px;
+}
+
+input{
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button{
+    padding:10px 20px;
+    cursor:pointer;
+}
+
+#keyBox{
+    margin-top:15px;
+    word-break:break-all;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Lisans Oluşturucu</h2>
+
+    <input id="username" placeholder="Kullanıcı Adı">
+
+    <br>
+
+    <button id="taskBtn">
+        Göreve Git
+    </button>
+
+    <p id="timer"></p>
+
+    <button id="generateBtn" disabled>
+        Lisans Oluştur
+    </button>
+
+    <div id="keyBox"></div>
+</div>
+
+<script>
+document.getElementById("taskBtn").onclick = () => {
+
+    window.open(
+        "https://youtube.com",
+        "_blank"
+    );
+
+    let seconds = 95;
+
+    document.getElementById("taskBtn").disabled = true;
+
+    const interval = setInterval(() => {
+
+        document.getElementById("timer").innerText =
+            seconds + " saniye bekleyin";
+
+        seconds--;
+
+        if(seconds < 0){
+            clearInterval(interval);
+
+            document.getElementById("timer").innerText =
+                "Tamamlandı";
+
+            document.getElementById("generateBtn").disabled = false;
+        }
+
+    },1000);
+};
+
+async function generateKey(username){
+
+    const today = new Date();
+
+    const data =
+        username.toLowerCase() +
+        "|" +
+        today.toISOString().slice(0,10) +
+        "|" +
+        "SECRET_2026";
+
+    const hashBuffer = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(data)
+    );
+
+    const hashArray =
+        Array.from(new Uint8Array(hashBuffer));
+
+    return hashArray
+        .map(x => x.toString(16).padStart(2,"0"))
+        .join("")
+        .substring(0,32)
+        .toUpperCase();
+}
+
+document.getElementById("generateBtn").onclick =
+async () => {
+
+    const username =
+        document.getElementById("username").value;
+
+    if(!username){
+        alert("Kullanıcı adı gir");
+        return;
+    }
+
+    const key =
+        await generateKey(username);
+
+    document.getElementById("keyBox").innerHTML =
+        "<h3>Lisans:</h3>" + key;
+};
+</script>
+
+</body>
+</html>

@@ -150,17 +150,17 @@ input{
 
         <div class="task">
             <button onclick="task(0)">Youtube Subscribe</button>
-            <div class="time" id="t0">60</div>
+            <div class="time" id="t0">20</div>
         </div>
 
         <div class="task">
             <button onclick="task(1)">Youtube Watch a video</button>
-            <div class="time" id="t1">70</div>
+            <div class="time" id="t1">20</div>
         </div>
 
         <div class="task">
             <button onclick="task(2)">Youtube like a video</button>
-            <div class="time" id="t2">80</div>
+            <div class="time" id="t2">20</div>
         </div>
 
         <button class="btn" id="keyBtn" disabled onclick="generateKey()">
@@ -232,28 +232,28 @@ function checkAll(){
 
 function generateKey(){
 
-    let date=new Date().toISOString().slice(0,10).replaceAll("-","");
+    let date = new Date().toISOString().slice(0,10).replaceAll("-","");
 
-    let mix="";
-    let max=Math.max(username.length,date.length);
+    let alphabetValue = "";
 
-    for(let i=0;i<max;i++){
-        if(username[i]) mix+=username[i];
-        if(date[i]) mix+=date[i];
+    for(let i = 0; i < username.length; i++){
+
+        let char = username[i].toUpperCase();
+
+        if(char >= "A" && char <= "Z"){
+            alphabetValue += (char.charCodeAt(0) - 64);
+        }else{
+            alphabetValue += char;
+        }
     }
 
-    let key="KEY: "+btoa(mix).substring(0,26).toUpperCase();
+    let key = "FREE_" + alphabetValue + "_" + date;
 
-    let box=document.getElementById("keyBox");
-    box.innerText=key;
+    let box = document.getElementById("keyBox");
+    box.innerText = key;
     box.classList.add("key-success");
 
-    document.getElementById("copyBtn").style.display="block";
-}
-
-function copyKey(){
-    let text=document.getElementById("keyBox").innerText;
-    navigator.clipboard.writeText(text);
+    document.getElementById("copyBtn").style.display = "block";
 }
 
 </script>

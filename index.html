@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Tale HUB</title>
@@ -10,15 +10,16 @@ body{
     font-family:Arial;
     background:#0b0f1a;
     color:white;
-    overflow:hidden;
+    overflow-x:hidden;
 }
 
-/* HEADER */
+/* TITLE */
 .header{
     text-align:center;
     margin-top:25px;
-    font-size:44px;
-    font-weight:bold;
+    font-size:60px;
+    font-weight:900;
+    letter-spacing:2px;
 }
 
 .header span:nth-child(1){color:#4db8ff;}
@@ -28,55 +29,14 @@ body{
 .header span:nth-child(5){color:#aaff66;}
 .header span:nth-child(6){color:#ffee66;}
 
-/* MAIN BUTTON */
-#openBtn{
-    position:absolute;
-    bottom:40px;
-    left:50%;
-    transform:translateX(-50%);
-    padding:14px 45px;
-    border:none;
-    border-radius:12px;
-    background:#1f2a44;
-    color:white;
-    cursor:pointer;
-    font-size:16px;
-    transition:0.3s;
-}
-
-#openBtn:hover{
-    background:#2e3f66;
-}
-
-/* OVERLAY */
-#overlay{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-    display:none;
-}
-
-/* CENTER PANEL */
-.panel{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%) scale(0.8);
+/* CENTER CARD */
+.card{
     width:420px;
+    margin:80px auto;
     background:#0f1629;
     border-radius:18px;
     padding:25px;
-    opacity:0;
-    transition:0.4s;
-    box-shadow:0 0 25px rgba(0,0,0,0.6);
-}
-
-.panel.active{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1);
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
 }
 
 /* INPUT */
@@ -91,7 +51,7 @@ input{
     color:white;
 }
 
-/* BUTTON STYLE */
+/* BUTTON */
 .btn{
     width:100%;
     padding:12px;
@@ -105,11 +65,12 @@ input{
 }
 
 .btn:hover{
-    background:#31446f;
+    background:#35508a;
 }
 
 /* TASK BOX */
 .taskBox{
+    display:none;
     margin-top:15px;
     background:#121c33;
     padding:15px;
@@ -124,7 +85,7 @@ input{
 
 /* THEME BUTTON */
 #themeBtn{
-    position:absolute;
+    position:fixed;
     top:15px;
     right:15px;
     padding:10px 15px;
@@ -137,18 +98,13 @@ input{
 
 /* THEME PANEL */
 .themePanel{
-    position:absolute;
-    right:-200px;
+    position:fixed;
+    right:10px;
     top:60px;
     width:180px;
     background:#111a2e;
     border-radius:14px;
     padding:10px;
-    transition:0.4s;
-}
-
-.themePanel.active{
-    right:10px;
 }
 
 .themeBtn{
@@ -160,10 +116,37 @@ input{
     cursor:pointer;
 }
 
-.blue{background:#1f3b73;}
-.dark{background:#0b0f1a;}
-.green{background:#1f4d3a;}
-.purple{background:#2d1f4d;}
+.white{background:#f0f0f0;color:black;}
+.black{background:#0b0f1a;}
+.navy{background:#0a1a33;}
+.sapphire{background:#0f2d52;}
+
+/* FEATURES */
+.features{
+    width:80%;
+    margin:80px auto;
+    background:#0f1629;
+    padding:25px;
+    border-radius:18px;
+}
+
+.features h2{
+    text-align:center;
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+.features ul{
+    list-style:none;
+    padding:0;
+}
+
+.features li{
+    padding:8px;
+    background:#121c33;
+    margin:6px 0;
+    border-radius:10px;
+}
 
 </style>
 </head>
@@ -174,44 +157,58 @@ input{
     <span>T</span><span>a</span><span>l</span><span>e</span><span> </span><span>HUB</span>
 </div>
 
-<button id="themeBtn" onclick="toggleTheme()">🎨 Theme</button>
+<button id="themeBtn" onclick="toggleTheme()">Theme</button>
 
-<div id="overlay"></div>
+<div class="themePanel">
+    <button class="themeBtn white" onclick="setTheme('#f0f0f0')">White</button>
+    <button class="themeBtn black" onclick="setTheme('#0b0f1a')">Black</button>
+    <button class="themeBtn navy" onclick="setTheme('#0a1a33')">Navy</button>
+    <button class="themeBtn sapphire" onclick="setTheme('#0f2d52')">Sapphire</button>
+</div>
 
-<div class="panel" id="panel">
+<div class="card">
 
-    <h3>Key System</h3>
+    <!-- USER STEP -->
+    <div id="userBox">
+        <h3>Enter your Roblox Username</h3>
+        <input id="username" placeholder="Your Roblox Name">
+        <button class="btn" onclick="confirmUser()">Confirm</button>
+    </div>
 
-    <input id="username" placeholder="Ana Roblox Adınızı Giriniz">
+    <!-- TASK STEP -->
+    <div class="taskBox" id="taskBox">
 
-    <button class="btn" onclick="confirmUser()">Onayla</button>
+        <h3>Tasks</h3>
 
-    <div class="taskBox" id="taskBox" style="display:none">
-
-        <button class="btn" onclick="task()">Görev Başlat</button>
+        <button class="btn" onclick="task()">Start Task 1</button>
+        <button class="btn" onclick="task()">Start Task 2</button>
+        <button class="btn" onclick="task()">Start Task 3</button>
 
         <p id="timer"></p>
 
         <button class="btn" id="keyBtn" disabled onclick="generateKey()">
-            Key Oluştur
+            Generate Key
         </button>
 
         <div id="keyBox"></div>
-
     </div>
 
 </div>
 
-<div class="themePanel" id="themePanel">
-
-    <button class="themeBtn blue" onclick="setTheme('#0b1b3a')">Mavi</button>
-    <button class="themeBtn dark" onclick="setTheme('#0b0f1a')">Siyah</button>
-    <button class="themeBtn green" onclick="setTheme('#0c2b22')">Yeşil</button>
-    <button class="themeBtn purple" onclick="setTheme('#1a1230')">Mor</button>
-
+<!-- FEATURES -->
+<div class="features">
+    <h2>Tale Plus Features</h2>
+    <ul>
+        <li>Advanced Key Security System</li>
+        <li>Daily Rotating Access Keys</li>
+        <li>Multi Task Verification Engine</li>
+        <li>Cloud Sync Protection Layer</li>
+        <li>Anti Tamper UI System</li>
+        <li>Encrypted Session Handling</li>
+        <li>Auto Validation Gateway</li>
+        <li>Fast Response Authentication</li>
+    </ul>
 </div>
-
-<button id="openBtn" onclick="openPanel()">Get Key</button>
 
 <script>
 
@@ -219,17 +216,13 @@ let username="";
 let time=60;
 let done=false;
 
-function openPanel(){
-    document.getElementById("panel").classList.add("active");
-    document.getElementById("overlay").style.display="block";
-    document.getElementById("openBtn").style.display="none";
-}
-
 function confirmUser(){
     let u=document.getElementById("username").value;
-    if(!u){alert("Ad gir");return;}
+    if(!u) return;
 
     username=u;
+
+    document.getElementById("userBox").style.display="none";
     document.getElementById("taskBox").style.display="block";
 }
 
@@ -242,7 +235,7 @@ function task(){
     let interval=setInterval(()=>{
 
         document.getElementById("timer").innerText=
-        "Süre: "+t+"s";
+        "Time Left: "+t+"s";
 
         t--;
 
@@ -250,7 +243,7 @@ function task(){
             clearInterval(interval);
             done=true;
             document.getElementById("keyBtn").disabled=false;
-            document.getElementById("timer").innerText="Tamamlandı";
+            document.getElementById("timer").innerText="All tasks completed";
         }
 
     },1000);
@@ -261,7 +254,6 @@ function generateKey(){
     let date=new Date().toISOString().slice(0,10).replaceAll("-","");
 
     let mix="";
-
     let max=Math.max(username.length,date.length);
 
     for(let i=0;i<max;i++){
@@ -270,12 +262,7 @@ function generateKey(){
     }
 
     document.getElementById("keyBox").innerText=
-    "KEY: "+btoa(mix).substring(0,24).toUpperCase();
-}
-
-/* THEME */
-function toggleTheme(){
-    document.getElementById("themePanel").classList.toggle("active");
+    "KEY: "+btoa(mix).substring(0,26).toUpperCase();
 }
 
 function setTheme(color){

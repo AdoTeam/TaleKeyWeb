@@ -12,16 +12,20 @@ body{
     overflow-x:hidden;
 }
 
-/* TITLE */
+/* HEADER */
 .header{
     text-align:center;
     margin-top:25px;
     font-size:60px;
     font-weight:900;
-    letter-spacing:2px;
-    color:#00d9ff;
-    text-shadow:0 0 10px #00d9ff;
 }
+
+.header span:nth-child(1){color:#4db8ff;}
+.header span:nth-child(2){color:#66ccff;}
+.header span:nth-child(3){color:#33ffcc;}
+.header span:nth-child(4){color:#66ff99;}
+.header span:nth-child(5){color:#aaff66;}
+.header span:nth-child(6){color:#ffee66;}
 
 /* CARD */
 .card{
@@ -29,6 +33,7 @@ body{
     margin:60px auto;
     padding:20px;
     border-radius:18px;
+    transition:0.3s;
 }
 
 /* INPUT */
@@ -51,97 +56,125 @@ input{
     cursor:pointer;
 }
 
-/* TASK */
+/* TASK ROW */
 .task{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:12px;
-    margin-top:8px;
-    border-radius:12px;
     background:rgba(255,255,255,0.05);
+    padding:12px;
+    border-radius:12px;
+    margin-top:8px;
 }
 
-/* DONE */
-.done{
-    background:#00c8d7 !important;
-    color:black;
+.task button{
+    width:auto;
+    padding:8px 12px;
+    border-radius:10px;
 }
 
-/* TIME */
+/* RIGHT TIME */
 .time{
     min-width:60px;
     text-align:right;
     font-weight:bold;
 }
 
-/* KEY BOX (NEW) */
-#keyScreen{
-    display:none;
-    text-align:center;
-    margin-top:20px;
-}
-
-#keyBox{
-    font-size:18px;
-    padding:15px;
-    border-radius:12px;
-    background:#121c33;
+.check{
     color:#00ff99;
-    word-break:break-all;
-    margin-bottom:10px;
 }
 
-/* COPY BUTTON */
-.copyBtn{
-    padding:10px 20px;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    background:#00d9ff;
-    color:black;
-    font-weight:bold;
+/* FEATURES */
+.features{
+    width:80%;
+    margin:60px auto;
+    padding:25px;
+    border-radius:18px;
+    transition:0.3s;
 }
+
+.features h2{
+    text-align:center;
+}
+
+.features li{
+    padding:8px;
+    margin:6px 0;
+    border-radius:10px;
+    list-style:none;
+}
+
+/* THEMES */
+.white-body{background:#f2f2f2;color:black;}
+.black-body{background:#0b0f1a;color:white;}
+.navy-body{background:#0a1a33;color:white;}
+.sapphire-body{background:#0f2d52;color:white;}
+
+.white-card{background:white;}
+.black-card{background:#0f1629;}
+.navy-card{background:#0f1f3a;}
+.sapphire-card{background:#12345f;}
+
+.white-feat{background:#fff;color:black;}
+.black-feat{background:#0f1629;color:white;}
+.navy-feat{background:#0c1c35;color:white;}
+.sapphire-feat{background:#0f2a4d;color:white;}
 
 </style>
 </head>
 
-<body class="black">
+<body class="black-body">
 
-<div class="header">Tale HUB</div>
+<div class="header">
+    <span>T</span><span>a</span><span>l</span><span>e</span><span> </span><span>HUB</span>
+</div>
 
-<div class="card">
+<div class="card black-card" id="card">
 
     <div id="userBox">
-        <input id="username" placeholder="Roblox Name">
-        <button class="btn" onclick="start()">Confirm</button>
+        <h3>Enter your Roblox Username</h3>
+        <input id="username" placeholder="Your Roblox Name">
+        <button class="btn" onclick="confirmUser()">Confirm</button>
     </div>
 
     <div id="taskBox" style="display:none">
 
-        <div class="task" id="t0">
+        <h3>Tasks</h3>
+
+        <div class="task">
             <button onclick="task(0)">Task 1</button>
-            <div class="time">60</div>
+            <div class="time" id="t0">60</div>
         </div>
 
-        <div class="task" id="t1">
+        <div class="task">
             <button onclick="task(1)">Task 2</button>
-            <div class="time">70</div>
+            <div class="time" id="t1">70</div>
         </div>
 
-        <div class="task" id="t2">
+        <div class="task">
             <button onclick="task(2)">Task 3</button>
-            <div class="time">80</div>
+            <div class="time" id="t2">80</div>
         </div>
 
-    </div>
+        <button class="btn" id="keyBtn" disabled onclick="generateKey()">
+            Generate Key
+        </button>
 
-    <!-- KEY SECTION (UPDATED ONLY) -->
-    <div id="keyScreen">
-        <div id="keyBox">YOUR KEY WILL APPEAR HERE</div>
-        <button class="copyBtn" onclick="copyKey()">Copy Key</button>
-    </div>
+        <div id="keyBox"></div>
 
+    </div>
+</div>
+
+<div class="features black-feat" id="features">
+    <h2>Tale Plus Features</h2>
+    <ul>
+        <li>Advanced Authentication System</li>
+        <li>Multi Layer Task Verification</li>
+        <li>Daily Key Rotation Engine</li>
+        <li>Secure Session Handler</li>
+        <li>Anti Tamper Interface</li>
+        <li>Fast Response Gateway</li>
+    </ul>
 </div>
 
 <script>
@@ -149,7 +182,7 @@ input{
 let username="";
 let done=[false,false,false];
 
-function start(){
+function confirmUser(){
     username=document.getElementById("username").value;
     if(!username) return;
 
@@ -161,32 +194,27 @@ function task(i){
 
     window.open("https://youtube.com","_blank");
 
-    let el=document.querySelectorAll(".task")[i];
-    let timeEl=el.querySelector(".time");
-
-    let t=parseInt(timeEl.innerText);
+    let el=document.getElementById("t"+i);
+    let t=parseInt(el.innerText);
 
     let interval=setInterval(()=>{
 
-        t--;
-        timeEl.innerText=t;
-
-        if(t<=0){
+        if(t>0){
+            el.innerText=t;
+            t--;
+        }else{
             clearInterval(interval);
-
-            timeEl.innerText="✔";
-            el.classList.add("done");
-
+            el.innerHTML="✔";
             done[i]=true;
-            check();
+            checkAll();
         }
 
     },1000);
 }
 
-function check(){
-    if(done.every(v=>v)){
-        generateKey();
+function checkAll(){
+    if(done.every(v=>v===true)){
+        document.getElementById("keyBtn").disabled=false;
     }
 }
 
@@ -202,20 +230,27 @@ function generateKey(){
         if(date[i]) mix+=date[i];
     }
 
-    let key=btoa(mix).substring(0,24).toUpperCase();
-
-    document.getElementById("taskBox").style.display="none";
-    document.getElementById("keyScreen").style.display="block";
-
-    document.getElementById("keyBox").innerText=key;
+    document.getElementById("keyBox").innerText=
+    "KEY: "+btoa(mix).substring(0,26).toUpperCase();
 }
 
-function copyKey(){
-    navigator.clipboard.writeText(document.getElementById("keyBox").innerText);
-    alert("Copied!");
+/* THEMES */
+function setTheme(type){
+
+    document.body.className=type+"-body";
+    document.getElementById("card").className="card "+type+"-card";
+    document.getElementById("features").className="features "+type+"-feat";
 }
 
 </script>
+
+<!-- simple theme switch -->
+<div style="position:fixed;top:15px;right:15px;">
+    <button onclick="setTheme('white')">White</button>
+    <button onclick="setTheme('black')">Black</button>
+    <button onclick="setTheme('navy')">Navy</button>
+    <button onclick="setTheme('sapphire')">Sapphire</button>
+</div>
 
 </body>
 </html>

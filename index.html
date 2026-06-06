@@ -1,151 +1,208 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Tale HUB Key System</title>
 
 <style>
 body{
+    margin:0;
+    font-family:Arial;
     background:#0f0f0f;
     color:white;
-    font-family:Arial;
+    overflow:hidden;
+}
+
+/* HEADER */
+.header{
     text-align:center;
-    padding-top:40px;
-}
-
-.title{
-    font-size:40px;
-    font-weight:bold;
-    background: linear-gradient(90deg, red, yellow, green, cyan, blue, magenta);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-.box{
     margin-top:20px;
+    font-size:42px;
+    font-weight:bold;
+}
+
+.header span:nth-child(1){color:#00aaff;}
+.header span:nth-child(2){color:#00ccff;}
+.header span:nth-child(3){color:#00ffcc;}
+.header span:nth-child(4){color:#00ff99;}
+.header span:nth-child(5){color:#aaff00;}
+.header span:nth-child(6){color:#ffff66;}
+
+/* bottom button */
+#mainBtn{
+    position:absolute;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:15px 30px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+/* RIGHT PANEL */
+.panel{
+    position:absolute;
+    right:-350px;
+    top:0;
+    width:300px;
+    height:100%;
+    background:#1b1b1b;
+    padding:20px;
+    transition:0.4s;
+}
+
+.panel.active{
+    right:0;
 }
 
 input{
+    width:100%;
     padding:10px;
-    width:200px;
-    border-radius:6px;
-    border:none;
+    margin-top:10px;
 }
 
 button{
     padding:10px;
-    margin:5px;
+    margin-top:10px;
     cursor:pointer;
+    width:100%;
 }
 
+/* TASK AREA */
 .task{
-    display:none;
     margin-top:20px;
+    display:none;
+}
+
+.task button{
+    margin-top:8px;
 }
 
 #keyBox{
-    margin-top:20px;
-    font-size:20px;
+    margin-top:15px;
     color:#00ff99;
+    font-size:18px;
+}
+
+/* theme button */
+#themeBtn{
+    position:absolute;
+    top:10px;
+    right:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="title">Tale HUB</div>
-<h3>Key System</h3>
-
-<div class="box">
-    <input id="username" placeholder="Adını yaz">
-    <button onclick="startSystem()">✔</button>
+<div class="header">
+    <span>T</span><span>a</span><span>l</span><span>e</span><span> </span><span>HUB</span>
 </div>
 
-<div class="task" id="taskArea">
+<button id="themeBtn" onclick="changeBg()">🎨</button>
 
-    <h3>Görevler</h3>
+<button id="mainBtn" onclick="openPanel()">Get Key</button>
 
-    <button onclick="openTask(1)">Görev 1 (YouTube)</button>
-    <button onclick="openTask(2)">Görev 2 (YouTube)</button>
-    <button onclick="openTask(3)">Görev 3 (YouTube)</button>
+<!-- RIGHT PANEL -->
+<div class="panel" id="panel">
 
-    <p id="timer"></p>
+    <h3>Login</h3>
 
-    <button id="genBtn" disabled onclick="generateKey()">
-        Key Oluştur
-    </button>
+    <input id="username" placeholder="Ana Roblox Adınızı Giriniz">
 
-    <div id="keyBox"></div>
+    <button onclick="confirmUser()">Onayla</button>
+
+    <div class="task" id="taskArea">
+
+        <h3>Görevler</h3>
+
+        <button onclick="task(1)">Task 1</button>
+        <button onclick="task(2)">Task 2</button>
+        <button onclick="task(3)">Task 3</button>
+
+        <p id="timer"></p>
+
+        <button id="keyBtn" disabled onclick="generateKey()">
+            Key Oluştur
+        </button>
+
+        <div id="keyBox"></div>
+
+    </div>
 </div>
 
 <script>
 
-let time = 95;
-let finished = false;
-let usernameGlobal = "";
+let username="";
+let completed=[false,false,false];
+let time=[30,40,50]; // her görev farklı süre
 
-// kullanıcı başlat
-function startSystem(){
-    let name = document.getElementById("username").value;
-
-    if(!name){
-        alert("Ad gir");
-        return;
-    }
-
-    usernameGlobal = name;
-
-    document.getElementById("taskArea").style.display = "block";
+function openPanel(){
+    document.getElementById("mainBtn").style.display="none";
+    document.getElementById("panel").classList.add("active");
 }
 
-// görev aç
-function openTask(id){
-    window.open("https://youtube.com", "_blank");
+function confirmUser(){
+    let u=document.getElementById("username").value;
+    if(!u){alert("İsim gir");return;}
 
-    if(finished) return;
+    username=u;
+    document.getElementById("taskArea").style.display="block";
+}
 
-    let interval = setInterval(() => {
+function task(id){
 
-        document.getElementById("timer").innerText =
-            time + " saniye kaldı";
+    window.open("https://youtube.com","_blank");
 
-        time--;
+    let i=id-1;
+    let t=time[i];
 
-        if(time < 0){
+    let interval=setInterval(()=>{
+
+        document.getElementById("timer").innerText=
+        "Task "+id+" - "+t+"s";
+
+        t--;
+
+        if(t<0){
             clearInterval(interval);
-
-            document.getElementById("timer").innerText =
-                "Hazır!";
-
-            document.getElementById("genBtn").disabled = false;
-
-            finished = true;
+            completed[i]=true;
+            checkAll();
         }
 
-    }, 1000);
+    },1000);
 }
 
-// basit "karıştırma key"
+function checkAll(){
+
+    if(completed.every(v=>v===true)){
+        document.getElementById("keyBtn").disabled=false;
+        document.getElementById("timer").innerText="Tüm görevler tamam!";
+    }
+}
+
 function generateKey(){
 
-    let name = usernameGlobal.toUpperCase();
-    let date = new Date().toISOString().slice(0,10).replaceAll("-","");
+    let date=new Date().toISOString().slice(0,10).replaceAll("-","");
 
-    let mixed = "";
+    let mix="";
 
-    let max = Math.max(name.length, date.length);
+    let max=Math.max(username.length,date.length);
 
     for(let i=0;i<max;i++){
-
-        if(name[i]) mixed += name[i];
-        if(date[i]) mixed += date[i];
+        if(username[i]) mix+=username[i];
+        if(date[i]) mix+=date[i];
     }
 
-    let finalKey =
-        btoa(mixed).substring(0,24).toUpperCase();
+    document.getElementById("keyBox").innerText=
+    "KEY: "+btoa(mix).substring(0,25).toUpperCase();
+}
 
-    document.getElementById("keyBox").innerText =
-        "KEY: " + finalKey;
+let colors=["#111","#1a1a2e","#0f3460","#16213e","#000"];
+
+function changeBg(){
+    document.body.style.background=
+    colors[Math.floor(Math.random()*colors.length)];
 }
 
 </script>

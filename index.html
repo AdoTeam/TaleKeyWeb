@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Tale HUB Key System</title>
+<title>Tale HUB</title>
 
 <style>
 body{
     margin:0;
     font-family:Arial;
-    background:#0f0f0f;
+    background:#0b0f1a;
     color:white;
     overflow:hidden;
 }
@@ -16,80 +16,155 @@ body{
 /* HEADER */
 .header{
     text-align:center;
-    margin-top:20px;
-    font-size:42px;
+    margin-top:25px;
+    font-size:44px;
     font-weight:bold;
 }
 
-.header span:nth-child(1){color:#00aaff;}
-.header span:nth-child(2){color:#00ccff;}
-.header span:nth-child(3){color:#00ffcc;}
-.header span:nth-child(4){color:#00ff99;}
-.header span:nth-child(5){color:#aaff00;}
-.header span:nth-child(6){color:#ffff66;}
+.header span:nth-child(1){color:#4db8ff;}
+.header span:nth-child(2){color:#66ccff;}
+.header span:nth-child(3){color:#33ffcc;}
+.header span:nth-child(4){color:#66ff99;}
+.header span:nth-child(5){color:#aaff66;}
+.header span:nth-child(6){color:#ffee66;}
 
-/* bottom button */
-#mainBtn{
+/* MAIN BUTTON */
+#openBtn{
     position:absolute;
     bottom:40px;
     left:50%;
     transform:translateX(-50%);
-    padding:15px 30px;
-    font-size:18px;
+    padding:14px 45px;
+    border:none;
+    border-radius:12px;
+    background:#1f2a44;
+    color:white;
     cursor:pointer;
+    font-size:16px;
+    transition:0.3s;
 }
 
-/* RIGHT PANEL */
-.panel{
+#openBtn:hover{
+    background:#2e3f66;
+}
+
+/* OVERLAY */
+#overlay{
     position:absolute;
-    right:-350px;
     top:0;
-    width:300px;
+    left:0;
+    width:100%;
     height:100%;
-    background:#1b1b1b;
-    padding:20px;
-    transition:0.4s;
-}
-
-.panel.active{
-    right:0;
-}
-
-input{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-}
-
-button{
-    padding:10px;
-    margin-top:10px;
-    cursor:pointer;
-    width:100%;
-}
-
-/* TASK AREA */
-.task{
-    margin-top:20px;
+    background:rgba(0,0,0,0.6);
     display:none;
 }
 
-.task button{
-    margin-top:8px;
+/* CENTER PANEL */
+.panel{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(0.8);
+    width:420px;
+    background:#0f1629;
+    border-radius:18px;
+    padding:25px;
+    opacity:0;
+    transition:0.4s;
+    box-shadow:0 0 25px rgba(0,0,0,0.6);
 }
 
-#keyBox{
+.panel.active{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
+
+/* INPUT */
+input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    outline:none;
+    margin-top:10px;
+    background:#1a2440;
+    color:white;
+}
+
+/* BUTTON STYLE */
+.btn{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:12px;
+    background:#243356;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#31446f;
+}
+
+/* TASK BOX */
+.taskBox{
     margin-top:15px;
-    color:#00ff99;
-    font-size:18px;
+    background:#121c33;
+    padding:15px;
+    border-radius:14px;
 }
 
-/* theme button */
+/* TIMER */
+#timer{
+    margin-top:10px;
+    color:#66ffcc;
+}
+
+/* THEME BUTTON */
 #themeBtn{
     position:absolute;
-    top:10px;
+    top:15px;
+    right:15px;
+    padding:10px 15px;
+    border-radius:12px;
+    border:none;
+    background:#1f2a44;
+    color:white;
+    cursor:pointer;
+}
+
+/* THEME PANEL */
+.themePanel{
+    position:absolute;
+    right:-200px;
+    top:60px;
+    width:180px;
+    background:#111a2e;
+    border-radius:14px;
+    padding:10px;
+    transition:0.4s;
+}
+
+.themePanel.active{
     right:10px;
 }
+
+.themeBtn{
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    margin-top:8px;
+    cursor:pointer;
+}
+
+.blue{background:#1f3b73;}
+.dark{background:#0b0f1a;}
+.green{background:#1f4d3a;}
+.purple{background:#2d1f4d;}
+
 </style>
 </head>
 
@@ -99,86 +174,86 @@ button{
     <span>T</span><span>a</span><span>l</span><span>e</span><span> </span><span>HUB</span>
 </div>
 
-<button id="themeBtn" onclick="changeBg()">🎨</button>
+<button id="themeBtn" onclick="toggleTheme()">🎨 Theme</button>
 
-<button id="mainBtn" onclick="openPanel()">Get Key</button>
+<div id="overlay"></div>
 
-<!-- RIGHT PANEL -->
 <div class="panel" id="panel">
 
-    <h3>Login</h3>
+    <h3>Key System</h3>
 
     <input id="username" placeholder="Ana Roblox Adınızı Giriniz">
 
-    <button onclick="confirmUser()">Onayla</button>
+    <button class="btn" onclick="confirmUser()">Onayla</button>
 
-    <div class="task" id="taskArea">
+    <div class="taskBox" id="taskBox" style="display:none">
 
-        <h3>Görevler</h3>
-
-        <button onclick="task(1)">Task 1</button>
-        <button onclick="task(2)">Task 2</button>
-        <button onclick="task(3)">Task 3</button>
+        <button class="btn" onclick="task()">Görev Başlat</button>
 
         <p id="timer"></p>
 
-        <button id="keyBtn" disabled onclick="generateKey()">
+        <button class="btn" id="keyBtn" disabled onclick="generateKey()">
             Key Oluştur
         </button>
 
         <div id="keyBox"></div>
 
     </div>
+
 </div>
+
+<div class="themePanel" id="themePanel">
+
+    <button class="themeBtn blue" onclick="setTheme('#0b1b3a')">Mavi</button>
+    <button class="themeBtn dark" onclick="setTheme('#0b0f1a')">Siyah</button>
+    <button class="themeBtn green" onclick="setTheme('#0c2b22')">Yeşil</button>
+    <button class="themeBtn purple" onclick="setTheme('#1a1230')">Mor</button>
+
+</div>
+
+<button id="openBtn" onclick="openPanel()">Get Key</button>
 
 <script>
 
 let username="";
-let completed=[false,false,false];
-let time=[30,40,50]; // her görev farklı süre
+let time=60;
+let done=false;
 
 function openPanel(){
-    document.getElementById("mainBtn").style.display="none";
     document.getElementById("panel").classList.add("active");
+    document.getElementById("overlay").style.display="block";
+    document.getElementById("openBtn").style.display="none";
 }
 
 function confirmUser(){
     let u=document.getElementById("username").value;
-    if(!u){alert("İsim gir");return;}
+    if(!u){alert("Ad gir");return;}
 
     username=u;
-    document.getElementById("taskArea").style.display="block";
+    document.getElementById("taskBox").style.display="block";
 }
 
-function task(id){
+function task(){
 
     window.open("https://youtube.com","_blank");
 
-    let i=id-1;
-    let t=time[i];
+    let t=time;
 
     let interval=setInterval(()=>{
 
         document.getElementById("timer").innerText=
-        "Task "+id+" - "+t+"s";
+        "Süre: "+t+"s";
 
         t--;
 
         if(t<0){
             clearInterval(interval);
-            completed[i]=true;
-            checkAll();
+            done=true;
+            document.getElementById("keyBtn").disabled=false;
+            document.getElementById("timer").innerText="Tamamlandı";
         }
 
     },1000);
-}
-
-function checkAll(){
-
-    if(completed.every(v=>v===true)){
-        document.getElementById("keyBtn").disabled=false;
-        document.getElementById("timer").innerText="Tüm görevler tamam!";
-    }
 }
 
 function generateKey(){
@@ -195,14 +270,16 @@ function generateKey(){
     }
 
     document.getElementById("keyBox").innerText=
-    "KEY: "+btoa(mix).substring(0,25).toUpperCase();
+    "KEY: "+btoa(mix).substring(0,24).toUpperCase();
 }
 
-let colors=["#111","#1a1a2e","#0f3460","#16213e","#000"];
+/* THEME */
+function toggleTheme(){
+    document.getElementById("themePanel").classList.toggle("active");
+}
 
-function changeBg(){
-    document.body.style.background=
-    colors[Math.floor(Math.random()*colors.length)];
+function setTheme(color){
+    document.body.style.background=color;
 }
 
 </script>

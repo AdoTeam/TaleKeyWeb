@@ -8,18 +8,16 @@
 body{
     margin:0;
     font-family:Arial;
-    background:#0b0f1a;
-    color:white;
+    transition:0.3s;
     overflow-x:hidden;
 }
 
-/* TITLE */
+/* HEADER */
 .header{
     text-align:center;
     margin-top:25px;
     font-size:60px;
     font-weight:900;
-    letter-spacing:2px;
 }
 
 .header span:nth-child(1){color:#4db8ff;}
@@ -29,14 +27,13 @@ body{
 .header span:nth-child(5){color:#aaff66;}
 .header span:nth-child(6){color:#ffee66;}
 
-/* CENTER CARD */
+/* CARD */
 .card{
     width:420px;
-    margin:80px auto;
-    background:#0f1629;
+    margin:60px auto;
+    padding:20px;
     border-radius:18px;
-    padding:25px;
-    box-shadow:0 0 25px rgba(0,0,0,0.5);
+    transition:0.3s;
 }
 
 /* INPUT */
@@ -47,8 +44,6 @@ input{
     border:none;
     outline:none;
     margin-top:10px;
-    background:#1a2440;
-    color:white;
 }
 
 /* BUTTON */
@@ -58,195 +53,169 @@ input{
     margin-top:10px;
     border:none;
     border-radius:12px;
-    background:#243356;
-    color:white;
     cursor:pointer;
-    transition:0.3s;
 }
 
-.btn:hover{
-    background:#35508a;
-}
-
-/* TASK BOX */
-.taskBox{
-    display:none;
-    margin-top:15px;
-    background:#121c33;
-    padding:15px;
-    border-radius:14px;
-}
-
-/* TIMER */
-#timer{
-    margin-top:10px;
-    color:#66ffcc;
-}
-
-/* THEME BUTTON */
-#themeBtn{
-    position:fixed;
-    top:15px;
-    right:15px;
-    padding:10px 15px;
+/* TASK ROW */
+.task{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(255,255,255,0.05);
+    padding:12px;
     border-radius:12px;
-    border:none;
-    background:#1f2a44;
-    color:white;
-    cursor:pointer;
-}
-
-/* THEME PANEL */
-.themePanel{
-    position:fixed;
-    right:10px;
-    top:60px;
-    width:180px;
-    background:#111a2e;
-    border-radius:14px;
-    padding:10px;
-}
-
-.themeBtn{
-    width:100%;
-    padding:10px;
-    border-radius:10px;
-    border:none;
     margin-top:8px;
-    cursor:pointer;
 }
 
-.white{background:#f0f0f0;color:black;}
-.black{background:#0b0f1a;}
-.navy{background:#0a1a33;}
-.sapphire{background:#0f2d52;}
+.task button{
+    width:auto;
+    padding:8px 12px;
+    border-radius:10px;
+}
+
+/* RIGHT TIME */
+.time{
+    min-width:60px;
+    text-align:right;
+    font-weight:bold;
+}
+
+.check{
+    color:#00ff99;
+}
 
 /* FEATURES */
 .features{
     width:80%;
-    margin:80px auto;
-    background:#0f1629;
+    margin:60px auto;
     padding:25px;
     border-radius:18px;
+    transition:0.3s;
 }
 
 .features h2{
     text-align:center;
-    margin-bottom:20px;
-    font-size:28px;
-}
-
-.features ul{
-    list-style:none;
-    padding:0;
 }
 
 .features li{
     padding:8px;
-    background:#121c33;
     margin:6px 0;
     border-radius:10px;
+    list-style:none;
 }
+
+/* THEMES */
+.white-body{background:#f2f2f2;color:black;}
+.black-body{background:#0b0f1a;color:white;}
+.navy-body{background:#0a1a33;color:white;}
+.sapphire-body{background:#0f2d52;color:white;}
+
+.white-card{background:white;}
+.black-card{background:#0f1629;}
+.navy-card{background:#0f1f3a;}
+.sapphire-card{background:#12345f;}
+
+.white-feat{background:#fff;color:black;}
+.black-feat{background:#0f1629;color:white;}
+.navy-feat{background:#0c1c35;color:white;}
+.sapphire-feat{background:#0f2a4d;color:white;}
 
 </style>
 </head>
 
-<body>
+<body class="black-body">
 
 <div class="header">
     <span>T</span><span>a</span><span>l</span><span>e</span><span> </span><span>HUB</span>
 </div>
 
-<button id="themeBtn" onclick="toggleTheme()">Theme</button>
+<div class="card black-card" id="card">
 
-<div class="themePanel">
-    <button class="themeBtn white" onclick="setTheme('#f0f0f0')">White</button>
-    <button class="themeBtn black" onclick="setTheme('#0b0f1a')">Black</button>
-    <button class="themeBtn navy" onclick="setTheme('#0a1a33')">Navy</button>
-    <button class="themeBtn sapphire" onclick="setTheme('#0f2d52')">Sapphire</button>
-</div>
-
-<div class="card">
-
-    <!-- USER STEP -->
     <div id="userBox">
         <h3>Enter your Roblox Username</h3>
         <input id="username" placeholder="Your Roblox Name">
         <button class="btn" onclick="confirmUser()">Confirm</button>
     </div>
 
-    <!-- TASK STEP -->
-    <div class="taskBox" id="taskBox">
+    <div id="taskBox" style="display:none">
 
         <h3>Tasks</h3>
 
-        <button class="btn" onclick="task()">Start Task 1</button>
-        <button class="btn" onclick="task()">Start Task 2</button>
-        <button class="btn" onclick="task()">Start Task 3</button>
+        <div class="task">
+            <button onclick="task(0)">Task 1</button>
+            <div class="time" id="t0">60</div>
+        </div>
 
-        <p id="timer"></p>
+        <div class="task">
+            <button onclick="task(1)">Task 2</button>
+            <div class="time" id="t1">70</div>
+        </div>
+
+        <div class="task">
+            <button onclick="task(2)">Task 3</button>
+            <div class="time" id="t2">80</div>
+        </div>
 
         <button class="btn" id="keyBtn" disabled onclick="generateKey()">
             Generate Key
         </button>
 
         <div id="keyBox"></div>
-    </div>
 
+    </div>
 </div>
 
-<!-- FEATURES -->
-<div class="features">
+<div class="features black-feat" id="features">
     <h2>Tale Plus Features</h2>
     <ul>
-        <li>Advanced Key Security System</li>
-        <li>Daily Rotating Access Keys</li>
-        <li>Multi Task Verification Engine</li>
-        <li>Cloud Sync Protection Layer</li>
-        <li>Anti Tamper UI System</li>
-        <li>Encrypted Session Handling</li>
-        <li>Auto Validation Gateway</li>
-        <li>Fast Response Authentication</li>
+        <li>Advanced Authentication System</li>
+        <li>Multi Layer Task Verification</li>
+        <li>Daily Key Rotation Engine</li>
+        <li>Secure Session Handler</li>
+        <li>Anti Tamper Interface</li>
+        <li>Fast Response Gateway</li>
     </ul>
 </div>
 
 <script>
 
 let username="";
-let time=60;
-let done=false;
+let done=[false,false,false];
 
 function confirmUser(){
-    let u=document.getElementById("username").value;
-    if(!u) return;
-
-    username=u;
+    username=document.getElementById("username").value;
+    if(!username) return;
 
     document.getElementById("userBox").style.display="none";
     document.getElementById("taskBox").style.display="block";
 }
 
-function task(){
+function task(i){
 
     window.open("https://youtube.com","_blank");
 
-    let t=time;
+    let el=document.getElementById("t"+i);
+    let t=parseInt(el.innerText);
 
     let interval=setInterval(()=>{
 
-        document.getElementById("timer").innerText=
-        "Time Left: "+t+"s";
-
-        t--;
-
-        if(t<0){
+        if(t>0){
+            el.innerText=t;
+            t--;
+        }else{
             clearInterval(interval);
-            done=true;
-            document.getElementById("keyBtn").disabled=false;
-            document.getElementById("timer").innerText="All tasks completed";
+            el.innerHTML="✔";
+            done[i]=true;
+            checkAll();
         }
 
     },1000);
+}
+
+function checkAll(){
+    if(done.every(v=>v===true)){
+        document.getElementById("keyBtn").disabled=false;
+    }
 }
 
 function generateKey(){
@@ -265,11 +234,23 @@ function generateKey(){
     "KEY: "+btoa(mix).substring(0,26).toUpperCase();
 }
 
-function setTheme(color){
-    document.body.style.background=color;
+/* THEMES */
+function setTheme(type){
+
+    document.body.className=type+"-body";
+    document.getElementById("card").className="card "+type+"-card";
+    document.getElementById("features").className="features "+type+"-feat";
 }
 
 </script>
+
+<!-- simple theme switch -->
+<div style="position:fixed;top:15px;right:15px;">
+    <button onclick="setTheme('white')">White</button>
+    <button onclick="setTheme('black')">Black</button>
+    <button onclick="setTheme('navy')">Navy</button>
+    <button onclick="setTheme('sapphire')">Sapphire</button>
+</div>
 
 </body>
 </html>

@@ -12,27 +12,28 @@ body{
     overflow-x:hidden;
 }
 
-/* HEADER */
+/* NEON TITLE */
 .header{
     text-align:center;
     margin-top:25px;
-    font-size:60px;
+    font-size:62px;
     font-weight:900;
+    letter-spacing:3px;
+    color:#00eaff;
+    text-shadow:
+        0 0 5px #00eaff,
+        0 0 10px #00eaff,
+        0 0 20px #00bfff,
+        0 0 40px #0088ff;
 }
-
-.header span:nth-child(1){color:#4db8ff;}
-.header span:nth-child(2){color:#66ccff;}
-.header span:nth-child(3){color:#33ffcc;}
-.header span:nth-child(4){color:#66ff99;}
-.header span:nth-child(5){color:#aaff66;}
-.header span:nth-child(6){color:#ffee66;}
 
 /* CARD */
 .card{
     width:420px;
-    margin:60px auto;
+    margin:50px auto;
     padding:20px;
     border-radius:18px;
+    background:#0f1629;
     transition:0.3s;
 }
 
@@ -44,6 +45,8 @@ input{
     border:none;
     outline:none;
     margin-top:10px;
+    background:#1a2440;
+    color:white;
 }
 
 /* BUTTON */
@@ -54,6 +57,8 @@ input{
     border:none;
     border-radius:12px;
     cursor:pointer;
+    background:#243356;
+    color:white;
 }
 
 /* TASK ROW */
@@ -61,27 +66,59 @@ input{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background:rgba(255,255,255,0.05);
     padding:12px;
-    border-radius:12px;
     margin-top:8px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.05);
+    transition:0.3s;
 }
 
 .task button{
-    width:auto;
     padding:8px 12px;
     border-radius:10px;
+    border:none;
+    cursor:pointer;
+    background:#2a3c66;
+    color:white;
 }
 
-/* RIGHT TIME */
+/* COMPLETED TASK COLOR */
+.done{
+    background:#00bcd4 !important;
+    color:black;
+    box-shadow:0 0 12px #00eaff;
+}
+
+/* TIME */
 .time{
     min-width:60px;
     text-align:right;
     font-weight:bold;
 }
 
-.check{
+/* KEY SCREEN */
+#keyScreen{
+    display:none;
+    text-align:center;
+    margin-top:20px;
+}
+
+#keyBox{
+    font-size:22px;
+    margin:15px 0;
     color:#00ff99;
+    word-break:break-all;
+}
+
+/* COPY BUTTON */
+.copyBtn{
+    padding:10px 20px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    background:#00eaff;
+    color:black;
+    font-weight:bold;
 }
 
 /* FEATURES */
@@ -90,7 +127,7 @@ input{
     margin:60px auto;
     padding:25px;
     border-radius:18px;
-    transition:0.3s;
+    background:#0f1629;
 }
 
 .features h2{
@@ -98,83 +135,56 @@ input{
 }
 
 .features li{
+    list-style:none;
     padding:8px;
     margin:6px 0;
+    background:#121c33;
     border-radius:10px;
-    list-style:none;
 }
-
-/* THEMES */
-.white-body{background:#f2f2f2;color:black;}
-.black-body{background:#0b0f1a;color:white;}
-.navy-body{background:#0a1a33;color:white;}
-.sapphire-body{background:#0f2d52;color:white;}
-
-.white-card{background:white;}
-.black-card{background:#0f1629;}
-.navy-card{background:#0f1f3a;}
-.sapphire-card{background:#12345f;}
-
-.white-feat{background:#fff;color:black;}
-.black-feat{background:#0f1629;color:white;}
-.navy-feat{background:#0c1c35;color:white;}
-.sapphire-feat{background:#0f2a4d;color:white;}
 
 </style>
 </head>
 
-<body class="black-body">
+<body>
 
-<div class="header">
-    <span>T</span><span>a</span><span>l</span><span>e</span><span> </span><span>HUB</span>
-</div>
+<div class="header">Tale HUB</div>
 
-<div class="card black-card" id="card">
+<div class="card">
 
     <div id="userBox">
-        <h3>Enter your Roblox Username</h3>
+        <h3>Enter Roblox Username</h3>
         <input id="username" placeholder="Your Roblox Name">
-        <button class="btn" onclick="confirmUser()">Confirm</button>
+        <button class="btn" onclick="start()">Confirm</button>
     </div>
 
     <div id="taskBox" style="display:none">
 
         <h3>Tasks</h3>
 
-        <div class="task">
+        <div class="task" id="task0">
             <button onclick="task(0)">Task 1</button>
             <div class="time" id="t0">60</div>
         </div>
 
-        <div class="task">
+        <div class="task" id="task1">
             <button onclick="task(1)">Task 2</button>
             <div class="time" id="t1">70</div>
         </div>
 
-        <div class="task">
+        <div class="task" id="task2">
             <button onclick="task(2)">Task 3</button>
             <div class="time" id="t2">80</div>
         </div>
 
-        <button class="btn" id="keyBtn" disabled onclick="generateKey()">
-            Generate Key
-        </button>
-
-        <div id="keyBox"></div>
-
     </div>
-</div>
 
-<div class="features black-feat" id="features">
-    <h2>Tale Plus Features</h2>
-    <ul>
-        <li>Advanced Authentication System</li>
-        <li>Multi Layer Task Verification</li>
-        <li>Daily Key Rotation Engine</li>
-        <li>Secure Session Handler</li>
-        <li>Anti Tamper Interface</li>
-        <li>Fast Response Gateway</li>
-    </ul>
+    <!-- KEY SCREEN -->
+    <div id="keyScreen">
+        <h2>Your Key</h2>
+        <div id="keyBox">XXXXX-XXXXX-XXXXX</div>
+        <button class="copyBtn" onclick="copyKey()">Copy Key</button>
+    </div>
+
 </div>
 
 <script>
@@ -182,7 +192,7 @@ input{
 let username="";
 let done=[false,false,false];
 
-function confirmUser(){
+function start(){
     username=document.getElementById("username").value;
     if(!username) return;
 
@@ -195,6 +205,8 @@ function task(i){
     window.open("https://youtube.com","_blank");
 
     let el=document.getElementById("t"+i);
+    let box=document.getElementById("task"+i);
+
     let t=parseInt(el.innerText);
 
     let interval=setInterval(()=>{
@@ -204,8 +216,12 @@ function task(i){
             t--;
         }else{
             clearInterval(interval);
+
             el.innerHTML="✔";
+            box.classList.add("done");
+
             done[i]=true;
+
             checkAll();
         }
 
@@ -213,8 +229,9 @@ function task(i){
 }
 
 function checkAll(){
+
     if(done.every(v=>v===true)){
-        document.getElementById("keyBtn").disabled=false;
+        generateKey();
     }
 }
 
@@ -230,27 +247,21 @@ function generateKey(){
         if(date[i]) mix+=date[i];
     }
 
-    document.getElementById("keyBox").innerText=
-    "KEY: "+btoa(mix).substring(0,26).toUpperCase();
+    let key=btoa(mix).substring(0,24).toUpperCase();
+
+    document.getElementById("taskBox").style.display="none";
+    document.getElementById("keyScreen").style.display="block";
+
+    document.getElementById("keyBox").innerText=key;
 }
 
-/* THEMES */
-function setTheme(type){
-
-    document.body.className=type+"-body";
-    document.getElementById("card").className="card "+type+"-card";
-    document.getElementById("features").className="features "+type+"-feat";
+function copyKey(){
+    let text=document.getElementById("keyBox").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Key copied!");
 }
 
 </script>
-
-<!-- simple theme switch -->
-<div style="position:fixed;top:15px;right:15px;">
-    <button onclick="setTheme('white')">White</button>
-    <button onclick="setTheme('black')">Black</button>
-    <button onclick="setTheme('navy')">Navy</button>
-    <button onclick="setTheme('sapphire')">Sapphire</button>
-</div>
 
 </body>
 </html>

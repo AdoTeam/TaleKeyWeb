@@ -139,7 +139,7 @@ input{
 <div class="card black-card" id="card">
 
     <div id="userBox">
-        <h3>Enter your Roblox Username</h3>
+        <h3>Enter Tale License</h3>
         <input id="username" placeholder="Your Roblox Name">
         <button class="btn" onclick="confirmUser()">Confirm</button>
     </div>
@@ -232,23 +232,27 @@ function checkAll(){
 
 function generateKey(){
 
-    let date = new Date().toISOString().slice(0,10).replaceAll("-","");
+    let username = document.getElementById("username").value;
+    if(!username) return;
 
-    let alphabetValue = "";
+    // 1) PLAYER LICENSE (x) -> basit şifreleme
+    let license = btoa(username).replaceAll("=","");
 
-    for(let i = 0; i < username.length; i++){
+    // 2) BUGÜN TARİHİ
+    let d = new Date();
+    let day = String(d.getDate()).padStart(2,"0");
+    let month = String(d.getMonth()+1).padStart(2,"0");
+    let year = d.getFullYear();
 
-        let char = username[i].toUpperCase();
+    let date = day + month + year;   // örn: 06062026
 
-        if(char >= "A" && char <= "Z"){
-            alphabetValue += (char.charCodeAt(0) - 64);
-        }else{
-            alphabetValue += char;
-        }
-    }
+    // 3) TARİHİ TERS ÇEVİR
+    let reversedDate = date.split("").reverse().join("");
 
-    let key = "FREE_" + alphabetValue + "_" + date;
+    // 4) KEY FORMAT
+    let key = "FREE_API_" + reversedDate + "*" + license;
 
+    // 5) EKRANA YAZ
     let box = document.getElementById("keyBox");
     box.innerText = key;
     box.classList.add("key-success");

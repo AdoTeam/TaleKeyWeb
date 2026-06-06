@@ -12,7 +12,7 @@ body{
     overflow-x:hidden;
 }
 
-/* NEON TITLE (CLEAN) */
+/* TITLE */
 .header{
     text-align:center;
     margin-top:25px;
@@ -29,7 +29,6 @@ body{
     margin:60px auto;
     padding:20px;
     border-radius:18px;
-    transition:0.3s;
 }
 
 /* INPUT */
@@ -61,10 +60,9 @@ input{
     margin-top:8px;
     border-radius:12px;
     background:rgba(255,255,255,0.05);
-    transition:0.3s;
 }
 
-/* TASK DONE HIGHLIGHT */
+/* DONE */
 .done{
     background:#00c8d7 !important;
     color:black;
@@ -77,31 +75,33 @@ input{
     font-weight:bold;
 }
 
-/* KEY SCREEN */
+/* KEY BOX (NEW) */
 #keyScreen{
     display:none;
     text-align:center;
+    margin-top:20px;
 }
 
 #keyBox{
-    font-size:20px;
-    margin:15px 0;
+    font-size:18px;
+    padding:15px;
+    border-radius:12px;
+    background:#121c33;
     color:#00ff99;
     word-break:break-all;
+    margin-bottom:10px;
 }
 
+/* COPY BUTTON */
 .copyBtn{
     padding:10px 20px;
     border:none;
     border-radius:12px;
     cursor:pointer;
+    background:#00d9ff;
+    color:black;
+    font-weight:bold;
 }
-
-/* THEMES */
-.white{background:#f2f2f2;color:black;}
-.black{background:#0b0f1a;color:white;}
-.navy{background:#0a1a33;color:white;}
-.sapphire{background:#0f2d52;color:white;}
 
 </style>
 </head>
@@ -110,17 +110,14 @@ input{
 
 <div class="header">Tale HUB</div>
 
-<div class="card" id="card">
+<div class="card">
 
     <div id="userBox">
-        <h3>Enter Roblox Username</h3>
         <input id="username" placeholder="Roblox Name">
         <button class="btn" onclick="start()">Confirm</button>
     </div>
 
     <div id="taskBox" style="display:none">
-
-        <h3>Tasks</h3>
 
         <div class="task" id="t0">
             <button onclick="task(0)">Task 1</button>
@@ -139,10 +136,10 @@ input{
 
     </div>
 
+    <!-- KEY SECTION (UPDATED ONLY) -->
     <div id="keyScreen">
-        <h2>Your Key</h2>
-        <div id="keyBox"></div>
-        <button class="copyBtn" onclick="copyKey()">Copy</button>
+        <div id="keyBox">YOUR KEY WILL APPEAR HERE</div>
+        <button class="copyBtn" onclick="copyKey()">Copy Key</button>
     </div>
 
 </div>
@@ -189,11 +186,11 @@ function task(i){
 
 function check(){
     if(done.every(v=>v)){
-        showKey();
+        generateKey();
     }
 }
 
-function showKey(){
+function generateKey(){
 
     let date=new Date().toISOString().slice(0,10).replaceAll("-","");
 

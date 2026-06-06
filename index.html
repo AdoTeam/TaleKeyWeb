@@ -12,28 +12,23 @@ body{
     overflow-x:hidden;
 }
 
-/* NEON TITLE */
+/* NEON TITLE (CLEAN) */
 .header{
     text-align:center;
     margin-top:25px;
-    font-size:62px;
+    font-size:60px;
     font-weight:900;
-    letter-spacing:3px;
-    color:#00eaff;
-    text-shadow:
-        0 0 5px #00eaff,
-        0 0 10px #00eaff,
-        0 0 20px #00bfff,
-        0 0 40px #0088ff;
+    letter-spacing:2px;
+    color:#00d9ff;
+    text-shadow:0 0 10px #00d9ff;
 }
 
 /* CARD */
 .card{
     width:420px;
-    margin:50px auto;
+    margin:60px auto;
     padding:20px;
     border-radius:18px;
-    background:#0f1629;
     transition:0.3s;
 }
 
@@ -45,8 +40,6 @@ input{
     border:none;
     outline:none;
     margin-top:10px;
-    background:#1a2440;
-    color:white;
 }
 
 /* BUTTON */
@@ -57,11 +50,9 @@ input{
     border:none;
     border-radius:12px;
     cursor:pointer;
-    background:#243356;
-    color:white;
 }
 
-/* TASK ROW */
+/* TASK */
 .task{
     display:flex;
     justify-content:space-between;
@@ -73,20 +64,10 @@ input{
     transition:0.3s;
 }
 
-.task button{
-    padding:8px 12px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    background:#2a3c66;
-    color:white;
-}
-
-/* COMPLETED TASK COLOR */
+/* TASK DONE HIGHLIGHT */
 .done{
-    background:#00bcd4 !important;
+    background:#00c8d7 !important;
     color:black;
-    box-shadow:0 0 12px #00eaff;
 }
 
 /* TIME */
@@ -100,60 +81,40 @@ input{
 #keyScreen{
     display:none;
     text-align:center;
-    margin-top:20px;
 }
 
 #keyBox{
-    font-size:22px;
+    font-size:20px;
     margin:15px 0;
     color:#00ff99;
     word-break:break-all;
 }
 
-/* COPY BUTTON */
 .copyBtn{
     padding:10px 20px;
     border:none;
     border-radius:12px;
     cursor:pointer;
-    background:#00eaff;
-    color:black;
-    font-weight:bold;
 }
 
-/* FEATURES */
-.features{
-    width:80%;
-    margin:60px auto;
-    padding:25px;
-    border-radius:18px;
-    background:#0f1629;
-}
-
-.features h2{
-    text-align:center;
-}
-
-.features li{
-    list-style:none;
-    padding:8px;
-    margin:6px 0;
-    background:#121c33;
-    border-radius:10px;
-}
+/* THEMES */
+.white{background:#f2f2f2;color:black;}
+.black{background:#0b0f1a;color:white;}
+.navy{background:#0a1a33;color:white;}
+.sapphire{background:#0f2d52;color:white;}
 
 </style>
 </head>
 
-<body>
+<body class="black">
 
 <div class="header">Tale HUB</div>
 
-<div class="card">
+<div class="card" id="card">
 
     <div id="userBox">
         <h3>Enter Roblox Username</h3>
-        <input id="username" placeholder="Your Roblox Name">
+        <input id="username" placeholder="Roblox Name">
         <button class="btn" onclick="start()">Confirm</button>
     </div>
 
@@ -161,28 +122,27 @@ input{
 
         <h3>Tasks</h3>
 
-        <div class="task" id="task0">
+        <div class="task" id="t0">
             <button onclick="task(0)">Task 1</button>
-            <div class="time" id="t0">60</div>
+            <div class="time">60</div>
         </div>
 
-        <div class="task" id="task1">
+        <div class="task" id="t1">
             <button onclick="task(1)">Task 2</button>
-            <div class="time" id="t1">70</div>
+            <div class="time">70</div>
         </div>
 
-        <div class="task" id="task2">
+        <div class="task" id="t2">
             <button onclick="task(2)">Task 3</button>
-            <div class="time" id="t2">80</div>
+            <div class="time">80</div>
         </div>
 
     </div>
 
-    <!-- KEY SCREEN -->
     <div id="keyScreen">
         <h2>Your Key</h2>
-        <div id="keyBox">XXXXX-XXXXX-XXXXX</div>
-        <button class="copyBtn" onclick="copyKey()">Copy Key</button>
+        <div id="keyBox"></div>
+        <button class="copyBtn" onclick="copyKey()">Copy</button>
     </div>
 
 </div>
@@ -204,38 +164,36 @@ function task(i){
 
     window.open("https://youtube.com","_blank");
 
-    let el=document.getElementById("t"+i);
-    let box=document.getElementById("task"+i);
+    let el=document.querySelectorAll(".task")[i];
+    let timeEl=el.querySelector(".time");
 
-    let t=parseInt(el.innerText);
+    let t=parseInt(timeEl.innerText);
 
     let interval=setInterval(()=>{
 
-        if(t>0){
-            el.innerText=t;
-            t--;
-        }else{
+        t--;
+        timeEl.innerText=t;
+
+        if(t<=0){
             clearInterval(interval);
 
-            el.innerHTML="✔";
-            box.classList.add("done");
+            timeEl.innerText="✔";
+            el.classList.add("done");
 
             done[i]=true;
-
-            checkAll();
+            check();
         }
 
     },1000);
 }
 
-function checkAll(){
-
-    if(done.every(v=>v===true)){
-        generateKey();
+function check(){
+    if(done.every(v=>v)){
+        showKey();
     }
 }
 
-function generateKey(){
+function showKey(){
 
     let date=new Date().toISOString().slice(0,10).replaceAll("-","");
 
@@ -256,9 +214,8 @@ function generateKey(){
 }
 
 function copyKey(){
-    let text=document.getElementById("keyBox").innerText;
-    navigator.clipboard.writeText(text);
-    alert("Key copied!");
+    navigator.clipboard.writeText(document.getElementById("keyBox").innerText);
+    alert("Copied!");
 }
 
 </script>

@@ -104,19 +104,35 @@ input{
     list-style:none;
 }
 
-/* THEMES */
 .white-body{background:#f2f2f2;color:black;}
-.black-body{background:#0b0f1a;color:white;}
+
+.black-body{
+    background:white;
+    color:black;
+}
+
 .navy-body{background:#0a1a33;color:white;}
 .sapphire-body{background:#0f2d52;color:white;}
 
 .white-card{background:white;}
-.black-card{background:#0f1629;}
+
+.black-card{
+    background:white;
+    color:black;
+    box-shadow:0 0 15px rgba(0,0,0,0.1);
+}
+
 .navy-card{background:#0f1f3a;}
 .sapphire-card{background:#12345f;}
 
 .white-feat{background:#fff;color:black;}
-.black-feat{background:#0f1629;color:white;}
+
+.black-feat{
+    background:#f3f3f3;
+    color:black;
+    box-shadow:0 0 15px rgba(0,0,0,0.1);
+}
+
 .navy-feat{background:#0c1c35;color:white;}
 .sapphire-feat{background:#0f2a4d;color:white;}
 
@@ -140,7 +156,7 @@ input{
 
     <div id="userBox">
         <h3>Enter Tale License</h3>
-        <input id="username" placeholder="Your Roblox Name">
+        <input id="username" placeholder="Your Player License">
         <button class="btn" onclick="confirmUser()">Confirm</button>
     </div>
 

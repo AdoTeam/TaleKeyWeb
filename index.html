@@ -2,176 +2,267 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Tale HUB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tale HUB | Key System</title>
+
+<!-- Three.js Kütüphanesi (3D Arka Plan İçin) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial;
-    transition:0.3s;
-    overflow-x:hidden;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.header img{
-    width:400px;      /* Logo genişliği */
-    height:auto;
-    display:block;
-    margin:auto;
+body {
+    background-color: #05050c;
+    color: #fff;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-/* HEADER */
-.header{
-    text-align:center;
-    margin-top:25px;
-    font-size:60px;
-    font-weight:900;
+/* 3D Canvas Sabitleyici */
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
-.header span:nth-child(1){color:#4db8ff;}
-.header span:nth-child(2){color:#66ccff;}
-.header span:nth-child(3){color:#33ffcc;}
-.header span:nth-child(4){color:#66ff99;}
-.header span:nth-child(5){color:#aaff66;}
-.header span:nth-child(6){color:#ffee66;}
-
-/* CARD */
-.card{
-    width:420px;
-    margin:60px auto;
-    padding:20px;
-    border-radius:18px;
-    transition:0.3s;
+/* Üst Başlık Tasarımı */
+.main-title {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 50px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #4db8ff, #33ffcc, #ffee66);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(77, 184, 255, 0.3));
 }
 
-/* INPUT */
-input{
-    width:100%;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    outline:none;
-    margin-top:10px;
+.sub-title {
+    font-size: 16px;
+    color: #8fa0ba;
+    text-align: center;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
 }
 
-/* BUTTON */
-.btn{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
+/* Modern Cam (Glassmorphism) Kart Yapısı */
+.card {
+    width: 100%;
+    max-width: 480px;
+    margin: 40px 20px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
 }
 
-/* TASK ROW */
-.task{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:rgba(255,255,255,0.05);
-    padding:12px;
-    border-radius:12px;
-    margin-top:8px;
+h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #e2e8f0;
+    font-weight: 600;
 }
 
-.task button{
-    width:auto;
-    padding:8px 12px;
-    border-radius:10px;
+/* Input Alanı */
+input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+    margin-bottom: 15px;
 }
 
-/* RIGHT TIME */
-.time{
-    min-width:60px;
-    text-align:right;
-    font-weight:bold;
+input:focus {
+    border-color: #4db8ff;
+    box-shadow: 0 0 15px rgba(77, 184, 255, 0.2);
 }
 
-.check{
-    color:#00ff99;
+/* Butonlar */
+.btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #0072ff, #00c6ff);
+    border: none;
+    border-radius: 14px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* FEATURES */
-.features{
-    width:80%;
-    margin:60px auto;
-    padding:25px;
-    border-radius:18px;
-    transition:0.3s;
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 114, 255, 0.4);
 }
 
-.features h2{
-    text-align:center;
+.btn:disabled {
+    background: #2a3547;
+    color: #64748b;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
-.features li{
-    padding:8px;
-    margin:6px 0;
-    border-radius:10px;
-    list-style:none;
+/* Görev Satırları */
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 14px;
+    border-radius: 14px;
+    margin-bottom: 12px;
 }
 
-.white-body{background:#f2f2f2;color:black;}
-
-.black-body{
-    background-image:url("background_damian.png");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
+.task button {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
 }
 
-.navy-body{background:#0a1a33;color:white;}
-.sapphire-body{background:#0f2d52;color:white;}
-
-.white-card{background:white;}
-
-.black-card{
-    background:white;
-    color:black;
-    box-shadow:0 0 15px rgba(0,0,0,0.1);
+.task button:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
-.navy-card{background:#0f1f3a;}
-.sapphire-card{background:#12345f;}
-
-.white-feat{background:#fff;color:black;}
-
-.black-feat{
-    background:#f3f3f3;
-    color:black;
-    box-shadow:0 0 15px rgba(0,0,0,0.1);
+.time {
+    min-width: 60px;
+    text-align: right;
+    font-weight: bold;
+    color: #ff4d4d;
 }
 
-.navy-feat{background:#0c1c35;color:white;}
-.sapphire-feat{background:#0f2a4d;color:white;}
-
-/* KEY GREEN */
-.key-success{
-    color:#00ff99;
-    font-weight:bold;
-    margin-top:10px;
+.check {
+    color: #00ff99 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 153, 0.4);
 }
 
+/* Key Çıktı Kutusu */
+#keyBox {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px dashed rgba(0, 255, 153, 0.3);
+    border-radius: 12px;
+    text-align: center;
+    word-break: break-all;
+    display: none;
+}
+
+.key-success {
+    display: block !important;
+    color: #00ff99;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 16px;
+}
+
+#copyBtn {
+    margin-top: 10px;
+    background: linear-gradient(135deg, #00f2fe, #4facfe);
+}
+
+/* Bilgi Kutuları (Features / Guides) */
+.features-container {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 60px;
+    padding: 0 20px;
+}
+
+.feat-box {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 22px;
+}
+
+.feat-box h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-left: 4px solid #4db8ff;
+    padding-left: 10px;
+    letter-spacing: 1px;
+}
+
+.feat-box li {
+    list-style: none;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 14px;
+}
+
+.feat-box li:last-child {
+    border: none;
+}
+
+.guide-text {
+    color: #a0aec0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.note-tag {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
 </style>
 </head>
+<body>
 
-<body class="black-body">
+<!-- 3D Arka Planın Çizileceği Alan -->
+<div id="canvas-container"></div>
 
-<div class="header">
-    <img src="tal (1).png" alt="Tale HUB Logo">
-</div>
+<div class="main-title">Tale HUB</div>
+<div class="sub-title">Key System</div>
 
-<div class="card black-card" id="card">
-
+<div class="card" id="card">
+    <!-- ADIM 1: Lisans Doğrulama -->
     <div id="userBox">
         <h3>Enter Tale License</h3>
         <input id="username" placeholder="Your Player License">
         <button class="btn" onclick="confirmUser()">Confirm</button>
     </div>
 
+    <!-- ADIM 2: Görev Alanı -->
     <div id="taskBox" style="display:none">
-
-        <h3>Tasks</h3>
+        <h3>Complete Tasks</h3>
 
         <div class="task">
             <button onclick="task(0)">Youtube Subscribe</button>
@@ -184,7 +275,7 @@ input{
         </div>
 
         <div class="task">
-            <button onclick="task(2)">Youtube like a video</button>
+            <button onclick="task(2)">Youtube Like a video</button>
             <div class="time" id="t2">80</div>
         </div>
 
@@ -196,104 +287,171 @@ input{
         <button class="btn" id="copyBtn" style="display:none;" onclick="copyKey()">
             Copy Key
         </button>
-
     </div>
 </div>
 
-<div class="features black-feat" id="features">
-    <h2>Tale Plus Features</h2>
-    <ul>
-        <li style="color: rgb(255, 0, 0);font-weight: bolder;">-unlock Config Loader</li>
-        <li style="color: rgb(251, 255, 0);font-weight: bolder;">-Unlock AimBot Settings</li>
-        <li style="color: rgb(0, 255, 34);font-weight: bolder;">-Unlock PvP config loader</li>
-        <li style="color: rgb(0, 255, 242);font-weight: bolder;">-Unlock UI Features</li>
-        <li style="color: rgb(0, 4, 255);font-weight: bolder;">-Anti-Cheat Bypass</li>
-        <li style="color: rgb(195, 0, 255);font-weight: bolder;">coming soon......</li>
+<!-- Alt Özellikler ve Rehber Alanı -->
+<div class="features-container">
+    <div class="feat-box">
+        <h2>Tale Plus Features</h2>
+        <ul>
+            <li style="color: #ff4d4d; font-weight: 600;">- Unlock Config Loader</li>
+            <li style="color: #ffeb3b; font-weight: 600;">- Unlock AimBot Settings</li>
+            <li style="color: #00e676; font-weight: 600;">- Unlock PvP Config Loader</li>
+            <li style="color: #00e5ff; font-weight: 600;">- Unlock UI Features</li>
+            <li style="color: #2979ff; font-weight: 600;">- Anti-Cheat Bypass</li>
+            <li style="color: #d500f9; font-weight: 600; letter-spacing: 2px;">Coming soon...</li>
+        </ul>
+    </div>
 
-    </ul>
-</div>
-    <div class="features black-feat" id="features">
-    <h2>How To Get Key and License</h2>
-    <ul>
-        <p style="color:#00ff99;font-weight:bold;">First join any game and run Tale HUB and open menu click settings icon and copy player license and paste license to Get key place and complate tasks</p>
-        <h1>Note!!</h1>
-        <li style="color: rgb(255, 0, 0);font-weight: bolder;">Key is change every day</li>
-    </ul>
+    <div class="feat-box">
+        <h2>How To Get Key and License</h2>
+        <p class="guide-text">
+            First join any game and run <span style="color:#4db8ff; font-weight:bold;">Tale HUB</span>. Open the menu, click the settings icon, copy your player license, and paste it here to begin the tasks.
+        </p>
+        <span class="note-tag">Note: Key changes every 24 hours.</span>
+    </div>
 </div>
 
 <script>
+/* --- 3D ARKA PLAN SCRIPT (THREE.JS) --- */
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
 
-let username="";
-let done=[false,false,false];
+// Kamera ayarları
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 30;
 
-function confirmUser(){
-    username=document.getElementById("username").value;
-    if(!username) return;
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+container.appendChild(renderer.domElement);
 
-    document.getElementById("userBox").style.display="none";
-    document.getElementById("taskBox").style.display="block";
+// 3D Ağ (Geniş bir düzlem dalgası) oluşturma
+const geometry = new THREE.PlaneGeometry(60, 60, 45, 45);
+const material = new THREE.MeshBasicMaterial({
+    color: 0x1e3a8a,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.15
+});
+const mesh = new THREE.Mesh(geometry, material);
+mesh.rotation.x = 1.2;
+scene.add(mesh);
+
+// Fare hareket hassasiyeti
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX - window.innerWidth / 2) / 100;
+    mouseY = (e.clientY - window.innerHeight / 2) / 100;
+});
+
+// Animasyon döngüsü (Dalga efekti)
+let clock = new THREE.Clock();
+
+function animate() {
+    requestAnimationFrame(animate);
+    
+    const elapsedTime = clock.getElapsedTime();
+    const position = geometry.attributes.position;
+    
+    // Matematiksel sinüs dalgası simülasyonu
+    for (let i = 0; i < position.count; i++) {
+        const u = position.getX(i);
+        const v = position.getY(i);
+        const z = Math.sin(u * 0.2 + elapsedTime) * 1.5 + Math.cos(v * 0.2 + elapsedTime) * 1.5;
+        position.setZ(i, z);
+    }
+    geometry.attributes.position.needsUpdate = true;
+
+    // Fare hareketine göre hafifçe kamerayı esnet
+    mesh.rotation.z += 0.001;
+    camera.position.x += (mouseX - camera.position.x) * 0.05;
+    camera.position.y += (-mouseY - camera.position.y) * 0.05;
+    camera.lookAt(scene.position);
+
+    renderer.render(scene, camera);
+}
+animate();
+
+// Ekran boyutu değiştiğinde 3D sahnede bozulma olmaması için
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+
+/* --- KEY SİSTEMİ MANTIĞI (JS) --- */
+let licenseKey = "";
+let done = [false, false, false];
+
+function confirmUser() {
+    licenseKey = document.getElementById("username").value.trim();
+    if (!licenseKey) return;
+
+    document.getElementById("userBox").style.display = "none";
+    document.getElementById("taskBox").style.display = "block";
 }
 
-function task(i){
+function task(i) {
+    window.open("https://youtube.com", "_blank");
 
-    window.open("https://youtube.com","_blank");
+    let el = document.getElementById("t" + i);
+    let t = parseInt(el.innerText);
 
-    let el=document.getElementById("t"+i);
-    let t=parseInt(el.innerText);
-
-    let interval=setInterval(()=>{
-
-        if(t>0){
-            el.innerText=t;
+    let interval = setInterval(() => {
+        if (t > 0) {
             t--;
-        }else{
+            el.innerText = t;
+        } else {
             clearInterval(interval);
-            el.innerHTML="✔";
+            el.innerHTML = "&#10004;"; // Tik işareti
             el.classList.add("check");
-            done[i]=true;
+            done[i] = true;
             checkAll();
         }
-
-    },1000);
+    }, 1000);
 }
 
-function checkAll(){
-    if(done.every(v=>v===true)){
-        document.getElementById("keyBtn").disabled=false;
+function checkAll() {
+    if (done.every(v => v === true)) {
+        document.getElementById("keyBtn").disabled = false;
     }
 }
 
-function generateKey(){
+function generateKey() {
+    if (!licenseKey) return;
 
-    let username = document.getElementById("username").value;
-    if(!username) return;
+    // Base64 şifreleme
+    let encodedLicense = btoa(licenseKey).replaceAll("=", "");
 
-    // 1) PLAYER LICENSE (x) -> basit şifreleme
-    let license = btoa(username).replaceAll("=","");
-
-    // 2) BUGÜN TARİHİ
     let d = new Date();
-    let day = String(d.getDate()).padStart(2,"0");
-    let month = String(d.getMonth()+1).padStart(2,"0");
+    let day = String(d.getDate()).padStart(2, "0");
+    let month = String(d.getMonth() + 1).padStart(2, "0");
     let year = d.getFullYear();
+    let date = day + month + year;
 
-    let date = day + month + year;   // örn: 06062026
-
-    // 3) TARİHİ TERS ÇEVİR
     let reversedDate = date.split("").reverse().join("");
+    let generatedKey = "FREE_API_" + reversedDate + "*" + encodedLicense;
 
-    // 4) KEY FORMAT
-    let key = "FREE_API_" + reversedDate + "*" + license;
-
-    // 5) EKRANA YAZ
     let box = document.getElementById("keyBox");
-    box.innerText = key;
+    box.innerText = generatedKey;
     box.classList.add("key-success");
 
     document.getElementById("copyBtn").style.display = "block";
 }
 
+function copyKey() {
+    let keyText = document.getElementById("keyBox").innerText;
+    navigator.clipboard.writeText(keyText).then(() => {
+        let copyBtn = document.getElementById("copyBtn");
+        copyBtn.innerText = "Copied!";
+        setTimeout(() => { copyBtn.innerText = "Copy Key"; }, 2000);
+    });
+}
 </script>
 
 </body>
 </html>
+

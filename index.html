@@ -1,504 +1,141 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tale HUB | Key System</title>
-
-<!-- Hareketli 3D Arka Plan İçin Three.js Kütüphanesi -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<style>
-/* --- Temel Ayarlar --- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-body {
-    background-color: #030307; /* Koyu, derin arka plan */
-    color: #e0e6ed;
-    overflow-x: hidden;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-/* --- 3D Arka Plan Konteyneri --- */
-#canvas-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* İçeriğin arkasında kalması için */
-}
-
-/* --- Ana Başlık (Tale HUB) --- */
-.main-title {
-    font-size: 5rem;
-    font-weight: 900;
-    text-align: center;
-    margin-top: 50px;
-    letter-spacing: -2px;
-    text-transform: uppercase;
-    /* Gökkuşağı Efekti */
-    background: linear-gradient(90deg, #4db8ff, #33ffcc, #ffee66, #ff8855, #ff4d4d);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
-}
-
-.sub-title {
-    font-size: 1.5rem;
-    color: #8fa0ba;
-    text-align: center;
-    margin-bottom: 30px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-}
-
-/* --- Modern Cam (Glassmorphism) Kart Tasarımı --- */
-.card {
-    width: 90%;
-    max-width: 500px;
-    background: rgba(255, 255, 255, 0.03); /* Çok hafif beyazlık */
-    backdrop-filter: blur(15px) saturate(180%); /* Cam bulanıklığı */
-    -webkit-backdrop-filter: blur(15px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08); /* İnce kenarlık */
-    border-radius: 25px;
-    padding: 35px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    margin-bottom: 40px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Kartın içindeki başlıklar */
-h3 {
-    font-size: 1.6rem;
-    margin-bottom: 25px;
-    color: #fff;
-    font-weight: 700;
-    text-align: center;
-}
-
-/* --- Input Alanı --- */
-input {
-    width: 100%;
-    padding: 16px 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    color: #fff;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-    margin-bottom: 15px;
-}
-
-input:focus {
-    border-color: #4db8ff;
-    box-shadow: 0 0 15px rgba(77, 184, 255, 0.3);
-}
-
-/* --- Ana Butonlar --- */
-.btn {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #0072ff, #00c6ff);
-    border: none;
-    border-radius: 15px;
-    color: white;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 114, 255, 0.5);
-}
-
-.btn:disabled {
-    background: #2a3547;
-    color: #64748b;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* --- Görev Satırları --- */
-.task {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 12px;
-    transition: border-color 0.3s;
-}
-
-.task:hover {
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-.task button {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: background 0.2s;
-}
-
-.task button:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-/* Zamanlayıcı ve Tik İşareti */
-.time {
-    min-width: 60px;
-    text-align: right;
-    font-weight: bold;
-    color: #ff4d4d;
-    font-size: 1.2rem;
-}
-
-.check {
-    color: #00ff99 !important;
-    text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-}
-
-/* --- Anahtar Görüntüleme Kutusu --- */
-#keyBox {
-    margin-top: 20px;
-    padding: 18px;
-    background: rgba(0, 255, 153, 0.04);
-    border: 1px dashed rgba(0, 255, 153, 0.3);
-    border-radius: 12px;
-    text-align: center;
-    word-break: break-all;
-    display: none; /* Başlangıçta gizli */
-}
-
-.key-success {
-    display: block !important;
-    color: #00ff99;
-    font-weight: bold;
-    font-family: 'Courier New', Courier, monospace; /* Kod gibi görünmesi için */
-    font-size: 1rem;
-    letter-spacing: 1px;
-}
-
-#copyBtn {
-    margin-top: 10px;
-    background: linear-gradient(135deg, #00f2fe, #4facfe);
-}
-
-/* --- Özellikler ve Bilgi Bölümleri (Features) --- */
-.info-container {
-    width: 90%;
-    max-width: 900px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    margin-bottom: 60px;
-}
-
-.info-box {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 25px;
-}
-
-.info-box h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    color: #fff;
-    border-left: 5px solid #4db8ff;
-    padding-left: 12px;
-}
-
-.info-box li {
-    list-style: none;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    font-size: 0.95rem;
-}
-
-.info-box li:last-child {
-    border: none;
-}
-
-.guide-text {
-    color: #a0aec0;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-.highlight {
-    color: #00ff99;
-    font-weight: bold;
-}
-
-.note-tag {
-    color: #ff4d4d;
-    font-weight: bold;
-    margin-top: 15px;
-    display: block;
-    font-size: 1.1rem;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hediye Kampanyası</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #111;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+        .btn {
+            background-color: #ffcc00;
+            color: #000;
+            padding: 15px 30px;
+            font-size: 22px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+            transition: 0.2s;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .hidden {
+            display: none !important;
+        }
+        .warning-text {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+        .timer {
+            font-size: 45px;
+            font-weight: bold;
+            color: #ff3333;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+        .link-btn {
+            display: inline-block;
+            background-color: #fff;
+            color: #000;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        /* Süre bittiğinde kırmızı ekran durumu */
+        body.red-screen {
+            background-color: #b30000 !important;
+        }
+        .cartell-text {
+            font-size: 36px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            line-height: 1.4;
+        }
+    </style>
 </head>
 <body>
 
-<!-- 3D Arka Planın Çizileceği Alan -->
-<div id="canvas-container"></div>
-
-<!-- Ana Sayfa Başlıkları -->
-<div class="main-title">Tale HUB</div>
-<div class="sub-title">Key System</div>
-
-<!-- Ana İşlem Kartı -->
-<div class="card" id="card">
-    <!-- ADIM 1: Lisans Girişi -->
-    <div id="userBox">
-        <h3>Enter Tale License</h3>
-        <input id="username" placeholder="Your Player License (Copy from Game Settings)">
-        <button class="btn" onclick="confirmUser()">Confirm License</button>
-    </div>
-
-    <!-- ADIM 2: Görev Alanı (Başlangıçta Gizli) -->
-    <div id="taskBox" style="display:none">
-        <h3>Complete Tasks</h3>
-
-        <div class="task">
-            <button onclick="task(0)">Youtube Subscribe</button>
-            <div class="time" id="t0">60</div>
+    <div class="container" id="mainContainer">
+        <div id="step1">
+            <button class="btn" id="clickBtn">Hediye İçin Tıkla</button>
         </div>
 
-        <div class="task">
-            <button onclick="task(1)">Youtube Watch a video</button>
-            <div class="time" id="t1">70</div>
+        <div id="step2" class="hidden">
+            <p class="warning-text">Gerçek jojoyu kaçırdım adam ol öldürürüm eğer 60 saniye içinde bu vakfa 300 bin TL atmazsan</p>
+            <div class="timer" id="timerDisplay">01:00</div>
+            <a href="https://talemods.com/" class="link-btn" target="_blank">Vakıf İçin Tıkla</a>
         </div>
-
-        <div class="task">
-            <button onclick="task(2)">Youtube Like a video</button>
-            <div class="time" id="t2">80</div>
-        </div>
-
-        <!-- Key Alma Butonu (Pasif Başlar) -->
-        <button class="btn" id="keyBtn" disabled onclick="generateKey()">
-            Get Your Key
-        </button>
-
-        <!-- Key Görüntüleme ve Kopyalama -->
-        <div id="keyBox"></div>
-        <button class="btn" id="copyBtn" style="display:none;" onclick="copyKey()">
-            Copy Key
-        </button>
-    </div>
-</div>
-
-<!-- Alt Bilgi Kutuları -->
-<div class="info-container">
-    <div class="info-box">
-        <h2>Tale Plus Features</h2>
-        <ul>
-            <li style="color: #ff4d4d; font-weight: 600;">- Unlock Config Loader</li>
-            <li style="color: #ffeb3b; font-weight: 600;">- Unlock AimBot Settings</li>
-            <li style="color: #00e676; font-weight: 600;">- Unlock PvP Config Loader</li>
-            <li style="color: #00e5ff; font-weight: 600;">- Unlock UI Features</li>
-            <li style="color: #2979ff; font-weight: 600;">- Anti-Cheat Bypass</li>
-            <li style="color: #d500f9; font-weight: 600;">Coming soon...</li>
-        </ul>
     </div>
 
-    <div class="info-box">
-        <h2>How To Get Key</h2>
-        <p class="guide-text">
-            Join any game, run <span style="color:#4db8ff; font-weight:bold;">Tale HUB</span>, and open the menu. Click the settings icon, copy your unique "Player License", and paste it into the field above to start the tasks.
-        </p>
-        <span class="note-tag">Note: The key changes every 24 hours.</span>
-    </div>
-</div>
+    <script>
+        const clickBtn = document.getElementById('clickBtn');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const mainContainer = document.getElementById('mainContainer');
 
-<script>
-/* --- 1. THREE.JS HAREKETLİ 3D ARKA PLAN --- */
-const container = document.getElementById('canvas-container');
-const scene = new THREE.Scene();
+        let timeLeft = 60;
+        let timerInterval;
 
-// Kamera ayarları
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 30;
+        clickBtn.addEventListener('click', () => {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            
+            // Geri sayımı başlat
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                
+                let formattedTime = 
+                    String(minutes).padStart(2, '0') + ':' + 
+                    String(seconds).padStart(2, '0');
+                
+                timerDisplay.textContent = formattedTime;
 
-// Renderer (Çizici)
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-container.appendChild(renderer.domElement);
+                // Süre bittiğinde
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    triggerRedScreen();
+                }
+            }, 1000);
+        });
 
-// 3D Nesne (Dalgalanan Düzlem)
-const geometry = new THREE.PlaneGeometry(60, 60, 45, 45); // Düzlem boyutu ve detay seviyesi
-const material = new THREE.MeshBasicMaterial({
-    color: 0x1e3a8a, // Neon mavi tonu
-    wireframe: true, // Ağ yapısını göster
-    transparent: true,
-    opacity: 0.15 // Çok şeffaf, rahatsız etmeyen
-});
-const mesh = new THREE.Mesh(geometry, material);
-mesh.rotation.x = 1.2; // Eğik duruş
-scene.add(mesh);
-
-// Fare Hareketi Kontrolü
-let mouseX = 0, mouseY = 0;
-document.addEventListener('mousemove', (e) => {
-    // Fare koordinatlarını ekranın ortasına göre normalize et
-    mouseX = (e.clientX - window.innerWidth / 2) / 100;
-    mouseY = (e.clientY - window.innerHeight / 2) / 100;
-});
-
-// Animasyon Döngüsü
-const clock = new THREE.Clock();
-
-function animate() {
-    requestAnimationFrame(animate);
-    
-    const elapsedTime = clock.getElapsedTime();
-    
-    // Düzlemin noktalarını (verisleri) dalgalandır
-    const positionAttribute = geometry.attributes.position;
-    
-    for (let i = 0; i < positionAttribute.count; i++) {
-        // Her noktanın x ve y'sini al
-        const u = positionAttribute.getX(i);
-        const v = positionAttribute.getY(i);
-        
-        // Sinüs dalgaları oluştur (z koordinatını değiştir)
-        const z = Math.sin(u * 0.2 + elapsedTime) * 1.5 + Math.cos(v * 0.2 + elapsedTime) * 1.5;
-        positionAttribute.setZ(i, z);
-    }
-    positionAttribute.needsUpdate = true; // Değişiklikleri uygula
-
-    // Kamerayı fare hareketine göre hafifçe esnet
-    mesh.rotation.z += 0.001; // Sürekli yavaş dönüş
-    camera.position.x += (mouseX - camera.position.x) * 0.05;
-    camera.position.y += (-mouseY - camera.position.y) * 0.05;
-    camera.lookAt(scene.position);
-
-    renderer.render(scene, camera);
-}
-animate();
-
-// Ekran boyutu değiştiğinde 3D sahneyi güncelle
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-
-/* --- 2. KEY SİSTEMİ MANTIĞI (MEVCUT KODDAN GÜNCELLENDİ) --- */
-let licenseKey = ""; // Kullanıcının girdiği lisansı saklar
-let done = [false, false, false]; // Görev durumlarını tutar
-
-// Lisansı Onayla
-function confirmUser() {
-    licenseKey = document.getElementById("username").value.trim();
-    if (!licenseKey) return; // Boşsa işlem yapma
-
-    document.getElementById("userBox").style.display = "none";
-    document.getElementById("taskBox").style.display = "block";
-}
-
-// Görev Başlatma ve Zamanlama
-function task(i) {
-    // Görev linkini yeni sekmede aç
-    window.open("https://youtube.com", "_blank");
-
-    let el = document.getElementById("t" + i);
-    let t = parseInt(el.innerText); // Başlangıç zamanı
-
-    // Geri sayımı başlat
-    let interval = setInterval(() => {
-        if (t > 0) {
-            t--;
-            el.innerText = t;
-        } else {
-            // Zaman bitti
-            clearInterval(interval);
-            el.innerHTML = "&#10004;"; // Tik işareti
-            el.classList.add("check"); // Yeşil yap
-            done[i] = true;
-            checkAll(); // Hepsi bitti mi kontrol et
+        function triggerRedScreen() {
+            document.body.classList.add('red-screen');
+            mainContainer.innerHTML = '<div class="cartell-text">BY ARABIC MEXICAN CARTELLS</div>';
         }
-    }, 1000);
-}
-
-// Tüm Görevler Bitti mi?
-function checkAll() {
-    if (done.every(v => v === true)) {
-        // Key alma butonunu aktif et
-        document.getElementById("keyBtn").disabled = false;
-    }
-}
-
-// Anahtar (Key) Üretme Mantığı
-function generateKey() {
-    if (!licenseKey) return;
-
-    // 1. Basit Base 64 şifreleme
-    let encodedLicense = btoa(licenseKey).replaceAll("=", "");
-
-    // 2. Bugünün tarihini al (GGMYYYY)
-    let d = new Date();
-    let day = String(d.getDate()).padStart(2, "0");
-    let month = String(d.getMonth() + 1).padStart(2, "0");
-    let year = d.getFullYear();
-    let date = day + month + year;
-
-    // 3. Tarihi ters çevir
-    let reversedDate = date.split("").reverse().join("");
-
-    // 4. Key formatını oluştur
-    let generatedKey = "FREE_API_" + reversedDate + "*" + encodedLicense;
-
-    // 5. Ekranda göster
-    let box = document.getElementById("keyBox");
-    box.innerText = generatedKey;
-    box.classList.add("key-success");
-
-    // Kopyalama butonunu göster
-    document.getElementById("copyBtn").style.display = "block";
-}
-
-// Anahtarı Panoya Kopyalama
-function copyKey() {
-    let keyText = document.getElementById("keyBox").innerText;
-    navigator.clipboard.writeText(keyText).then(() => {
-        // Kullanıcıya kopyalandığını bildir
-        let copyBtn = document.getElementById("copyBtn");
-        copyBtn.innerText = "Copied!";
-        setTimeout(() => { copyBtn.innerText = "Copy Key"; }, 2000);
-    });
-}
-</script>
-
+    </script>
 </body>
 </html>

@@ -59,7 +59,7 @@
         <div class="aurora-blob blob-3"></div>
     </div>
 
-    <!-- 1. Aşama: Yükleme Ekranı (Preloader) -->
+    <!-- Yükleme Ekranı (Preloader) -->
     <div id="preloader" class="fixed inset-0 z-50 flex items-center justify-center bg-[#050000]">
         <div class="glass-panel p-6 rounded-2xl flex flex-col items-center w-72 red-glow relative overflow-hidden">
             <img src="logo.png" alt="Logo" class="h-16 w-16 mb-6 object-contain" onerror="this.src='https://via.placeholder.com/64/ff0000/ffffff?text=L'">
@@ -70,12 +70,7 @@
         </div>
     </div>
 
-    <!-- 2. Aşama: Dil Geçiş İntrosu -->
-    <div id="language-intro" class="fixed inset-0 z-40 bg-[#050000] flex items-center justify-center hidden opacity-0">
-        <h1 id="intro-text" class="text-4xl sm:text-6xl font-black text-red-500 text-glow tracking-widest text-center uppercase"></h1>
-    </div>
-
-    <!-- 3. Aşama: Sitenin Kendisi -->
+    <!-- Header -->
     <header class="p-4 flex justify-between items-center glass-panel rounded-b-2xl mx-2 mt-2 opacity-0 site-content relative z-10">
         <div class="text-red-500 font-bold tracking-wider text-glow sm:text-lg text-sm">Metich Dev</div>
         <div class="text-2xl sm:text-3xl font-black text-red-600 text-glow tracking-widest" id="main-title">METICH RAYS</div>
@@ -85,24 +80,45 @@
     </header>
 
     <main class="flex-grow p-4 mt-2 opacity-0 site-content relative z-10">
-        <!-- TANITIM -->
+        <!-- 1. WHO AM I BÖLÜMÜ -->
         <section id="sec-tanitim" class="section-content block">
-            <div class="glass-panel rounded-2xl p-8 text-center max-w-3xl mx-auto mt-10">
-                <h2 class="text-3xl text-red-500 mb-4 text-glow font-bold">Projeye Hoş Geldin</h2>
-                <p class="text-gray-300 leading-relaxed mb-6">Burası Metich Rays ana sayfası. Modüler yapı, custom bypass sistemleri ve özel araçların tanıtım merkezindesin. Aşağıdaki menüden satın alımlara veya detaylı bilgilere göz atabilirsin.</p>
-                <div class="inline-block p-1 rounded-full bg-gradient-to-r from-red-600 to-transparent">
-                    <div class="bg-[#110000] px-6 py-2 rounded-full text-sm font-mono text-red-400">STATUS: UNDETECTED</div>
+            <div class="glass-panel rounded-2xl p-6 sm:p-8 max-w-3xl mx-auto mt-10">
+                <h2 class="text-3xl text-red-500 mb-6 text-glow font-bold text-center">Who Am I?</h2>
+                <p class="text-gray-300 leading-relaxed mb-8 text-center text-lg">
+                    Hello, I'm Metich, a Turkish software developer. My main focus is reverse engineering.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Beceriler -->
+                    <div class="bg-red-950/30 p-5 rounded-xl border border-red-500/20 hover:border-red-500/50 transition">
+                        <h3 class="text-xl text-red-400 font-bold mb-4 border-b border-red-900/50 pb-2">Skills:</h3>
+                        <ul class="text-gray-300 space-y-3 font-mono text-sm">
+                            <li class="flex items-center"><span class="text-red-600 mr-2">></span> Binary file analysis</li>
+                            <li class="flex items-center"><span class="text-red-600 mr-2">></span> Anti-Cheat bypass development</li>
+                            <li class="flex items-center"><span class="text-red-600 mr-2">></span> Android Kernel modding & cheats</li>
+                        </ul>
+                    </div>
+
+                    <!-- Diller -->
+                    <div class="bg-red-950/30 p-5 rounded-xl border border-red-500/20 hover:border-red-500/50 transition">
+                        <h3 class="text-xl text-red-400 font-bold mb-4 border-b border-red-900/50 pb-2">Languages:</h3>
+                        <ul class="text-gray-300 space-y-3 font-mono text-sm">
+                            <li class="flex items-center"><span class="text-red-600 mr-2">></span> C++</li>
+                            <li class="flex items-center"><span class="text-red-600 mr-2">></span> C</li>
+                            <li class="flex items-center"><span class="text-red-600 mr-2">></span> and some Java 👉👈</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SATIN ALIMLAR -->
+        <!-- 2. SATIN ALIMLAR BÖLÜMÜ -->
         <section id="sec-satin-alim" class="section-content hidden">
             <h2 class="text-2xl text-red-500 mb-6 text-glow font-bold text-center">Ürünler</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto" id="products-container"></div>
         </section>
 
-        <!-- BİLGİ -->
+        <!-- 3. BİLGİ BÖLÜMÜ -->
         <section id="sec-bilgi" class="section-content hidden">
             <div class="glass-panel rounded-2xl p-8 text-center max-w-3xl mx-auto mt-10">
                 <h2 class="text-3xl text-red-500 mb-4 text-glow font-bold">Sistem Bilgisi</h2>
@@ -113,7 +129,7 @@
 
     <!-- Navigasyon Menüsü -->
     <nav class="fixed bottom-6 left-1/2 transform -translate-x-1/2 glass-panel rounded-full px-2 py-2 flex gap-2 sm:gap-4 opacity-0 site-content w-max z-40 shadow-[0_0_20px_rgba(255,0,0,0.2)]">
-        <button onclick="showSection('sec-tanitim')" class="glass-btn px-4 py-2 rounded-full text-xs sm:text-sm font-bold text-white tracking-wide">Tanıtım</button>
+        <button onclick="showSection('sec-tanitim')" class="glass-btn px-4 py-2 rounded-full text-xs sm:text-sm font-bold text-white tracking-wide">Who Am I?</button>
         <button onclick="showSection('sec-satin-alim')" class="glass-btn px-4 py-2 rounded-full text-xs sm:text-sm font-bold text-white tracking-wide">Satın Alımlar</button>
         <button onclick="showSection('sec-bilgi')" class="glass-btn px-4 py-2 rounded-full text-xs sm:text-sm font-bold text-white tracking-wide">Bilgi</button>
     </nav>
@@ -193,16 +209,14 @@
             anime({ targets: target, opacity: [0, 1], translateY: [15, 0], duration: 400, easing: 'easeOutCubic' });
         }
 
-        // Açılış Animasyon Zinciri
+        // Açılış Animasyonu (Direkt Ana Siteye Geçiş)
         window.onload = () => {
-            // 1. Bar Dolumu
             anime({
                 targets: '#loading-bar',
                 width: '100%',
                 duration: 1200,
                 easing: 'easeInOutQuart',
                 complete: () => {
-                    // Preloader Kaybolur
                     anime({
                         targets: '#preloader',
                         opacity: 0,
@@ -210,52 +224,13 @@
                         easing: 'easeInQuad',
                         complete: () => {
                             document.getElementById('preloader').style.display = 'none';
-                            startLanguageSequence();
+                            showMainSite();
                         }
                     });
                 }
             });
         };
 
-        // 2. Dillerin Geçiş Yaptığı Animasyon
-        function startLanguageSequence() {
-            const intro = document.getElementById('language-intro');
-            const introText = document.getElementById('intro-text');
-            intro.classList.remove('hidden');
-            intro.style.opacity = '1';
-
-            const words = ["MERHABA", "ПРИВЕТ", "欢迎", "WELCOME"];
-            let delayTime = 700; // Her kelimenin ekranda kalma süresi
-
-            words.forEach((word, i) => {
-                setTimeout(() => {
-                    introText.innerText = word;
-                    anime({
-                        targets: '#intro-text',
-                        scale: [0.8, 1.1, 1],
-                        opacity: [0, 1],
-                        duration: 500,
-                        easing: 'easeOutExpo'
-                    });
-                }, i * delayTime);
-            });
-
-            // Tüm kelimeler bittikten sonra ana siteye geçiş
-            setTimeout(() => {
-                anime({
-                    targets: '#language-intro',
-                    opacity: 0,
-                    duration: 600,
-                    easing: 'easeInOutQuad',
-                    complete: () => {
-                        intro.style.display = 'none';
-                        showMainSite();
-                    }
-                });
-            }, words.length * delayTime + 200);
-        }
-
-        // 3. Ana Sitenin Yüklenmesi
         function showMainSite() {
             anime({
                 targets: '.site-content',
@@ -266,7 +241,6 @@
                 easing: 'easeOutElastic(1, .8)'
             });
 
-            // Başlık Parlama Animasyonu
             anime({
                 targets: '#main-title',
                 textShadow: [

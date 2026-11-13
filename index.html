@@ -151,13 +151,38 @@
     </div>
 
     <script>
-        // Ürün Verileri
+        // Ürün Verileri - Açıklama kısımlarını kendi ürünlerine göre doldurabilirsin
         const products = [
-            { id: 1, name: "Metich Rays VIP", desc: "Sınırsız erişim ve mod menü.", detail: "Gelişmiş bypass sistemini içerir. Root gerektirmez." },
-            { id: 2, name: "Private Server Girişi", desc: "Tale HUB özel sunucularına kalıcı giriş.", detail: "Güncel sürümlere uyumlu offline/online custom sunucu erişimi." },
-            { id: 3, name: "ImGui Overlay Source", desc: "C++ ImGui menü altyapısı.", detail: "Firebase destekli kendi projelerinde kullanabileceğin kaynak kodu." },
-            { id: 4, name: "Custom Bypass Modülü", desc: "Bağımsız bypass ve anti-ban.", detail: "Bellek manipülasyonu yapanlar için koruma kalkanı." },
-            { id: 5, name: "Telegram Bot Altyapısı", desc: "Key oluşturma ve satış botu.", detail: "Kullanıcılara otomatik key veren, Telegram Stars destekli yönetim botu." }
+            { 
+                id: 1, 
+                name: "Metich Rays VIP", 
+                desc: "[Kısa açıklama buraya gelecek]", 
+                detail: "[Buraya ürünün özelliklerini anlatan detaylı ve uzun açıklamayı yazabilirsin.]" 
+            },
+            { 
+                id: 2, 
+                name: "Private Server Girişi", 
+                desc: "[Kısa açıklama buraya gelecek]", 
+                detail: "[Buraya ürünün özelliklerini anlatan detaylı ve uzun açıklamayı yazabilirsin.]" 
+            },
+            { 
+                id: 3, 
+                name: "ImGui Overlay Source", 
+                desc: "[Kısa açıklama buraya gelecek]", 
+                detail: "[Buraya ürünün özelliklerini anlatan detaylı ve uzun açıklamayı yazabilirsin.]" 
+            },
+            { 
+                id: 4, 
+                name: "Custom Bypass Modülü", 
+                desc: "[Kısa açıklama buraya gelecek]", 
+                detail: "[Buraya ürünün özelliklerini anlatan detaylı ve uzun açıklamayı yazabilirsin.]" 
+            },
+            { 
+                id: 5, 
+                name: "Telegram Bot Altyapısı", 
+                desc: "[Kısa açıklama buraya gelecek]", 
+                detail: "[Buraya ürünün özelliklerini anlatan detaylı ve uzun açıklamayı yazabilirsin.]" 
+            }
         ];
 
         const container = document.getElementById('products-container');
@@ -165,7 +190,8 @@
             container.innerHTML += `
                 <div class="glass-panel rounded-xl overflow-hidden flex flex-col group hover:-translate-y-1 transition-transform duration-300">
                     <div class="h-28 bg-red-900/20 relative border-b border-red-500/20 overflow-hidden">
-                        <img src="https://via.placeholder.com/400x150/110000/ff0000?text=METICH" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition duration-300">
+                        <!-- Banner resmi proban1.png, proban2.png vb. olarak çekiliyor -->
+                        <img src="proban${p.id}.png" onerror="this.src='https://via.placeholder.com/400x150/110000/ff0000?text=proban${p.id}.png'" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition duration-300">
                     </div>
                     <div class="p-5 flex-grow flex flex-col justify-between">
                         <div class="mb-4">
@@ -185,7 +211,12 @@
             const p = products.find(x => x.id === id);
             document.getElementById('modal-title').innerText = p.name;
             document.getElementById('modal-desc').innerText = p.detail;
-            document.getElementById('modal-img').src = 'https://via.placeholder.com/400x200/110000/ff0000?text=' + encodeURIComponent(p.name);
+            
+            // Modal içindeki büyük resim de aynı dosyayı çekecek
+            document.getElementById('modal-img').src = `proban${p.id}.png`;
+            document.getElementById('modal-img').onerror = function() {
+                this.src = `https://via.placeholder.com/400x200/110000/ff0000?text=proban${p.id}.png`;
+            };
             
             const modal = document.getElementById('product-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
